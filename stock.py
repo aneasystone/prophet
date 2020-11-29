@@ -119,13 +119,14 @@ class Stock:
         return _close > _open
 
     # check if tomorrow's open price can profit
-    def can_profit(self):
+    def can_profit(self, days):
         after_prices = self.repo.get_all_prices_after(self.code, self.date)
         tomorrow_open = after_prices['open'].values[0]
-        high1 = after_prices['high'].values[1]
-        high2 = after_prices['high'].values[2]
-        high3 = after_prices['high'].values[3]
-        return high1 > tomorrow_open or high2 > tomorrow_open or high3 > tomorrow_open        
+        for d in range(1, days + 1):
+            high = after_prices['high'].values[d]
+            if high > tomorrow_open:
+                return True
+        return False
 
     # check if this stock is recommended
     # First, macd is low

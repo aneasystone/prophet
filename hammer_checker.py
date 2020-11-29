@@ -14,7 +14,7 @@ if __name__ == '__main__':
             for date in dates:
                 try:
                     ss = Stock(s['name'], s['ts_code'], date)
-                    if ss.is_recommended() and ss.features == 'GOLDCROSS':
+                    if ss.is_recommended() and ss.features == 'HAMMER':
                         if ss.can_profit(3):
                             print(ss.name + " " + ss.code + " " + date + " PROFIT")
                             profit += 1
