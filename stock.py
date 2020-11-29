@@ -118,15 +118,25 @@ class Stock:
         _close = self.prices['close'].values[-1]
         return _close > _open
 
-    # check if tomorrow's open price can profit
-    def can_profit(self, days):
+    # check if tomorrow's open price can profit in n days, and calculate the max profit rate
+    def get_max_profit_rate(self, n):
         after_prices = self.repo.get_all_prices_after(self.code, self.date)
         tomorrow_open = after_prices['open'].values[0]
-        for d in range(1, days + 1):
+        highs = []
+        for d in range(1, n + 1):
             high = after_prices['high'].values[d]
-            if high > tomorrow_open:
-                return True
-        return False
+            highs.append(high)
+        highs.sort()
+        highest = highs[-1]
+        return (highest - tomorrow_open) / tomorrow_open
+
+    # get profit statistics
+    def get_profit_statistics(self):
+        statistics = []
+        for n in range(1, 31):
+            max_profit_rate = self.get_max_profit_rate(n)
+            statistics.append(max_profit_rate)
+        return statistics
 
     # check if this stock is recommended
     # First, macd is low

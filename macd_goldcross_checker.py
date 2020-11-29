@@ -4,33 +4,39 @@ from repository import Repository
 
 if __name__ == '__main__':
 
+    all_statistics = []
+
     repo = Repository()
     stocks = repo.get_all_stocks()
     for s in stocks:
         try:
-            profit = 0
-            nonprofit = 0
+            # for debug
+            # if s['ts_code'] != '000001.SZ':
+            #     continue
             dates = repo.get_all_trade_dates(s['ts_code'])
             for date in dates:
                 try:
                     ss = Stock(s['name'], s['ts_code'], date)
                     if ss.is_recommended() and ss.features == 'GOLDCROSS':
-                        if ss.can_profit(3):
-                            print(ss.name + " " + ss.code + " " + date + " PROFIT")
-                            profit += 1
-                        else:
-                            print(ss.name + " " + ss.code + " " + date + " NONPROFIT")
-                            nonprofit += 1
+                        statistics = ss.get_profit_statistics()
+                        all_statistics.append(statistics)
+                        print("%s %s %s" % (ss.name, ss.code, date))
+                        for stat in statistics:
+                            print("%.2f" % stat, end=" ")
+                        print("")
                 except:
                     # traceback.print_exc()
                     pass
-            
-            alls = profit + nonprofit
-            if alls > 0:
-                print("-----------------------------------")
-                print("--- %s %s" % (s['name'], s['ts_code']))
-                print("--- PROFIT RATE: %0.2f (%s/%s)" % (profit/alls, profit, alls))
-                print("-----------------------------------")
         except:
             # traceback.print_exc()
             pass
+
+    print("-----------------------")
+    for d in range(0, 30):
+        sum = 0
+        count = 0
+        for stat in all_statistics:
+            sum += stat[d]
+            if stat[d] > 0:
+                count += 1
+        print("%d: %.2f %.2f" % (d+1, count/len(all_statistics), sum/len(all_statistics)))
