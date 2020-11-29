@@ -26,7 +26,7 @@ class Updator:
     def update_all_daily_by_trade_date(self, trade_date):
         sql = "SELECT * FROM daily WHERE trade_date = '" + trade_date + "'"
         df = pd.read_sql(sql=sql, con=engine)
-        if df.empty():
+        if df.empty:
             print('Data is empty, update by tushare api')
             df = pro.daily(trade_date = trade_date)
             df.to_sql('daily', engine, index=False, if_exists='append', chunksize=5000)
