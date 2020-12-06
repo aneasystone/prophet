@@ -16,7 +16,7 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if s['ts_code'] != '603617.SH':
+            # if ss['ts_code'] != '603976.SH':
             #     continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)

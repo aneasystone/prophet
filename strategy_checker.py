@@ -13,9 +13,9 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            strategy = 'MACDGOLDCROSS'
-            if ss['ts_code'] != '603613.SH':
-                continue
+            strategy = 'RIVERFLOWER'
+            # if ss['ts_code'] != '603613.SH':
+            #     continue
 
             dates = repo.get_all_trade_dates(ss['ts_code'])
             for date in dates:
