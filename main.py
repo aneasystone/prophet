@@ -5,7 +5,7 @@ from updator import Updator
 from strategy_factory import StrategyFactory
 
 if __name__ == '__main__':
-    trade_date = '20201203'
+    trade_date = '20201204'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 

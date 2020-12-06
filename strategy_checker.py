@@ -13,8 +13,10 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if ss['ts_code'] != '603613.SH':
-                # continue
+            strategy = 'MACDGOLDCROSS'
+            if ss['ts_code'] != '603613.SH':
+                continue
+
             dates = repo.get_all_trade_dates(ss['ts_code'])
             for date in dates:
                 try:
@@ -22,7 +24,7 @@ if __name__ == '__main__':
                     if stk.init():
                         strategies = sf.match_strategies(stk)
                         for s in strategies:
-                            if s == 'MACDGOLDCROSS':
+                            if s == strategy:
                                 statistics = strategies[s].get_profit_statistics()
                                 all_statistics.append(statistics)
                                 print("%s %s %s" % (stk.name, stk.code, date))

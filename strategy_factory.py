@@ -1,5 +1,6 @@
 from strategy.hammer import Hammer
 from strategy.pierce import Pierce
+from strategy.swallow import Swallow
 from strategy.macd_goldcross import MacdGoldCross
 
 class StrategyFactory:
@@ -10,6 +11,7 @@ class StrategyFactory:
         strategies = {
             "HAMMER": Hammer(stk),
             "PIERCE": Pierce(stk),
+            "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
         }
 
