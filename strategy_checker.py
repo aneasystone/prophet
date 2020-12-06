@@ -5,7 +5,7 @@ from strategy_factory import StrategyFactory
 
 if __name__ == '__main__':
 
-    all_statistics = []
+    all_statistics = {}
 
     sf = StrategyFactory()
     repo = Repository()
@@ -13,9 +13,8 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            strategy = 'RIVERFLOWER'
-            # if ss['ts_code'] != '603613.SH':
-            #     continue
+            # if ss['ts_code'] != '000001.SZ':
+                # continue
 
             dates = repo.get_all_trade_dates(ss['ts_code'])
             for date in dates:
@@ -24,13 +23,18 @@ if __name__ == '__main__':
                     if stk.init():
                         strategies = sf.match_strategies(stk)
                         for s in strategies:
-                            if s == strategy:
-                                statistics = strategies[s].get_profit_statistics()
-                                all_statistics.append(statistics)
-                                print("%s %s %s" % (stk.name, stk.code, date))
-                                for stat in statistics:
-                                    print("%.2f" % stat, end=" ")
-                                print("")
+                            # for debug
+                            # if s != 'RED':
+                            #     continue
+                            
+                            statistics = strategies[s].get_profit_statistics()
+                            if s not in all_statistics:
+                                all_statistics[s] = list()
+                            all_statistics[s].append(statistics)
+                            print("%s %s %s %s" % (stk.name, stk.code, date, s))
+                            for stat in statistics:
+                                print("%.2f" % stat, end=" ")
+                            print("")
                 except:
                     # traceback.print_exc()
                     pass
@@ -39,11 +43,11 @@ if __name__ == '__main__':
             pass
 
     print("-----------------------")
-    for d in range(0, 30):
-        sum = 0
-        count = 0
-        for stat in all_statistics:
-            sum += stat[d]
-            if stat[d] > 0:
-                count += 1
-        print("%d: %.2f %.2f" % (d+1, count/len(all_statistics), sum/len(all_statistics)))
+    for s in all_statistics:
+        print(s + " ", end=" ")
+        for d in range(0, 30):
+            sum = 0
+            for stat in all_statistics[s]:
+                sum += stat[d]
+            print("%.2f" % (sum/len(all_statistics[s])), end=" ")
+        print("")

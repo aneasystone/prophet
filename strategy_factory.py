@@ -3,6 +3,7 @@ from strategy.pierce import Pierce
 from strategy.swallow import Swallow
 from strategy.macd_goldcross import MacdGoldCross
 from strategy.river_flower import RiverFlower
+from strategy.red import Red
 
 class StrategyFactory:
 
@@ -15,6 +16,7 @@ class StrategyFactory:
             "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
             "RIVERFLOWER": RiverFlower(stk),
+            "RED": Red(stk),
         }
 
         # which strategy is recommended

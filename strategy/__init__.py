@@ -55,13 +55,8 @@ class Strategy:
     def get_max_profit_rate(self, n):
         after_prices = self.repo.get_all_prices_after(self.stk.code, self.stk.date)
         tomorrow_open = after_prices['open'].values[0]
-        highs = []
-        for d in range(1, n + 1):
-            high = after_prices['high'].values[d]
-            highs.append(high)
-        highs.sort()
-        highest = highs[-1]
-        return (highest - tomorrow_open) / tomorrow_open
+        high = after_prices['high'].values[n]
+        return (high - tomorrow_open) / tomorrow_open
 
     # get profit statistics
     def get_profit_statistics(self):
