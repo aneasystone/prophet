@@ -12,11 +12,11 @@ class StrategyFactory:
         # define all strategies here
         strategies = {
             "HAMMER": Hammer(stk),
-            "PIERCE": Pierce(stk),
-            "SWALLOW": Swallow(stk),
+            # "PIERCE": Pierce(stk),
+            # "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
-            "RIVERFLOWER": RiverFlower(stk),
-            "RED": Red(stk),
+            # "RIVERFLOWER": RiverFlower(stk),
+            # "RED": Red(stk),
         }
 
         # which strategy is recommended

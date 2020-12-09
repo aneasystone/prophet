@@ -13,8 +13,8 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if ss['ts_code'] != '000001.SZ':
-                # continue
+            if ss['ts_code'] != '002832.SZ':
+                 continue
 
             dates = repo.get_all_trade_dates(ss['ts_code'])
             for date in dates:
@@ -49,5 +49,5 @@ if __name__ == '__main__':
             sum = 0
             for stat in all_statistics[s]:
                 sum += stat[d]
-            print("%.2f" % (sum/len(all_statistics[s])), end=" ")
+            print("%.2f" % (100*sum/len(all_statistics[s])), end=" ")
         print("")
