@@ -15,21 +15,18 @@ class Amplitude(Strategy):
                 cnt += 1
         return cnt >= days - 1
 
+    def is_damn_down(self):
+        pct_chg = self.stk.prices['pct_chg'].values[-1]
+        return pct_chg < -5
+
     def is_recommended(self):
         if not self.is_low_macd():
+            return False
+        if self.is_damn_down():
             return False
         # latest 7 days
         # average amplitude over 3%
         return self.is_amplitude_over(7, 3)
-
-    def get_average_amplitude(self, days):
-        amplitude = 0
-        for i in range(1, days + 1):
-            _high = self.stk.prices['high'].values[-i]
-            _low = self.stk.prices['low'].values[-i]
-            _pre_close = self.stk.prices['pre_close'].values[-i]
-            amplitude += (_high - _low) / _pre_close
-        return amplitude / days
 
     def get_max_profit_rate(self, n):
         after_prices = self.repo.get_all_prices_after(self.stk.code, self.stk.date)
@@ -37,7 +34,7 @@ class Amplitude(Strategy):
         low = after_prices['low'].values[0]
 
         # calculate a fit buy price
-        average_amplitude = self.get_average_amplitude(7)
+        average_amplitude = self.stk.get_average_amplitude(7)
         buy_price = pre_close * (1 - average_amplitude/2)
         if (buy_price <= low):
             return -999

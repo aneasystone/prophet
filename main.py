@@ -74,7 +74,7 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if ss['ts_code'] != '000725.SZ':
+            # if ss['ts_code'] != '603277.SH':
             #     continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)
@@ -95,6 +95,19 @@ if __name__ == '__main__':
     print("------- RESULTS --------")
     print("------------------------")
     for s in results:
+        if s == 'AMPLITUDE':
+            continue
+        print(s + ":")
+        for stk in results[s]:
+            print(stk.name + " " + stk.code + " " + str(stk.close))
+            show_strategy_check_result(stk, s)
+
+    print("------------------------------")
+    print("------- WATCH RESULTS --------")
+    print("------------------------------")
+    for s in results:
+        if s != 'AMPLITUDE':
+            continue
         print(s + ":")
         for stk in results[s]:
             print(stk.name + " " + stk.code + " " + str(stk.close))

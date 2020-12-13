@@ -38,6 +38,16 @@ class Stock:
         close = self.prices["close"].values
         return talib.SMA(close, timeperiod = timeperiod)
 
+    # get average amplitude
+    def get_average_amplitude(self, days):
+        amplitude = 0
+        for i in range(1, days + 1):
+            _high = self.prices['high'].values[-i]
+            _low = self.prices['low'].values[-i]
+            _pre_close = self.prices['pre_close'].values[-i]
+            amplitude += (_high - _low) / _pre_close
+        return amplitude / days
+
     # Initialize price information
     def init(self):
 
