@@ -25,17 +25,31 @@ def show_strategy_check_result(stk, stragegy):
         # traceback.print_exc()
         pass
 
+    print("-------- RISE RATE ---------------")
+    if len(all_statistics) > 0:
+        for d in range(0, 30):
+            cnt = 0
+            for stat in all_statistics:
+                if stat[d] > 0:
+                    cnt += 1
+            print("%.2f" % (100*cnt/len(all_statistics)), end=" ")
+        print("")
+    else:
+        print("NO DATA")
     print("-------- PROFIT RATE ---------------")
-    for d in range(0, 30):
-        sum = 0
-        for stat in all_statistics:
-            sum += stat[d]
-        print("%.2f" % (100*sum/len(all_statistics)), end=" ")
-    print("")
+    if len(all_statistics) > 0:
+        for d in range(0, 30):
+            sum = 0
+            for stat in all_statistics:
+                sum += stat[d]
+            print("%.2f" % (100*sum/len(all_statistics)), end=" ")
+        print("")
+    else:
+        print("NO DATA")
     print("------------------------------------")
 
 if __name__ == '__main__':
-    trade_date = '20201209'
+    trade_date = '20201211'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
@@ -46,7 +60,7 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if ss['ts_code'] != '603976.SH':
+            # if ss['ts_code'] != '000725.SZ':
             #     continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)
