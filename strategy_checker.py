@@ -13,8 +13,8 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            if ss['ts_code'] != '002832.SZ':
-                 continue
+            # if ss['ts_code'] != '002594.SZ':
+            #      continue
 
             dates = repo.get_all_trade_dates(ss['ts_code'])
             for date in dates:
@@ -30,11 +30,14 @@ if __name__ == '__main__':
                             statistics = strategies[s].get_profit_statistics()
                             if s not in all_statistics:
                                 all_statistics[s] = list()
-                            all_statistics[s].append(statistics)
                             print("%s %s %s %s" % (stk.name, stk.code, date, s))
-                            for stat in statistics:
-                                print("%.2f" % stat, end=" ")
-                            print("")
+                            if statistics:
+                                for stat in statistics:
+                                    print("%.2f" % stat, end=" ")
+                                print("")
+                                all_statistics[s].append(statistics)
+                            else:
+                                print("BUY MISS")
                 except:
                     # traceback.print_exc()
                     pass

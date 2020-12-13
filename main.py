@@ -7,6 +7,7 @@ from strategy_factory import StrategyFactory
 def show_strategy_check_result(stk, stragegy):
     
     all_statistics = []
+    miss_statistics = []
     try:
         sf = StrategyFactory()
         repo = Repository()
@@ -17,7 +18,11 @@ def show_strategy_check_result(stk, stragegy):
                 if stk.init():
                     strategies = sf.match_strategies(stk)
                     statistics = strategies[stragegy].get_profit_statistics()
-                    all_statistics.append(statistics)
+                    if statistics:
+                        all_statistics.append(statistics)
+                        miss_statistics.append(0)
+                    else:
+                        miss_statistics.append(1)
             except:
                 # traceback.print_exc()
                 pass
@@ -44,6 +49,15 @@ def show_strategy_check_result(stk, stragegy):
                 sum += stat[d]
             print("%.2f" % (100*sum/len(all_statistics)), end=" ")
         print("")
+    else:
+        print("NO DATA")
+    print("-------- MISS RATE ---------------")
+    if len(miss_statistics) > 0:
+        cnt = 0
+        for stat in miss_statistics:
+            if stat:
+                cnt += 1
+        print("%.2f" % (100*cnt/len(miss_statistics)))
     else:
         print("NO DATA")
     print("------------------------------------")

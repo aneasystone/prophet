@@ -52,16 +52,19 @@ class Strategy:
         return body, tail, head
 
     # check if tomorrow's open price can profit in n days, and calculate the max profit rate
+    @abstractmethod
     def get_max_profit_rate(self, n):
         after_prices = self.repo.get_all_prices_after(self.stk.code, self.stk.date)
-        tomorrow_open = after_prices['open'].values[0]
+        buy_price = after_prices['open'].values[0]
         high = after_prices['high'].values[n]
-        return (high - tomorrow_open) / tomorrow_open
+        return (high - buy_price) / buy_price
 
     # get profit statistics
     def get_profit_statistics(self):
         statistics = []
         for n in range(1, 31):
             max_profit_rate = self.get_max_profit_rate(n)
+            if max_profit_rate == -999:
+                return None
             statistics.append(max_profit_rate)
         return statistics
