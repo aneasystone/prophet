@@ -12,6 +12,9 @@ class Hammer(Strategy):
         return tail / body > 2 and tail / head > 3
 
     def is_recommended(self):
+        # latest 7 days, average amplitude over 3%
+        if not self.is_amplitude_over(7, 3):
+            return False
         if not self.is_low_macd():
             return False
         return self.is_lowest() and self.is_hammer()

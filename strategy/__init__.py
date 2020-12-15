@@ -26,6 +26,19 @@ class Strategy:
                 count += 1
         return count >= 8
     
+    # check if average amplitude of latest n days is over m%
+    def is_amplitude_over(self, days, percent):
+        cnt = 0
+        for i in range(1, days + 1):
+            _high = self.stk.prices['high'].values[-i]
+            _low = self.stk.prices['low'].values[-i]
+            _pre_close = self.stk.prices['pre_close'].values[-i]
+            amplitude = (_high - _low) / _pre_close
+            # print(amplitude)
+            if 100 * amplitude > percent:
+                cnt += 1
+        return cnt >= days - 1
+
     # check if today's low price is the lowest in recent days
     def is_lowest(self):
         _low = self.stk.prices['low'].values[-1]

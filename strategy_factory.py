@@ -18,7 +18,7 @@ class StrategyFactory:
             "MACDGOLDCROSS": MacdGoldCross(stk),
             # "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
-            "AMPLITUDE": Amplitude(stk),
+            # "AMPLITUDE": Amplitude(stk),
         }
 
         # which strategy is recommended

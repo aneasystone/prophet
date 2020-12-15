@@ -63,7 +63,7 @@ def show_strategy_check_result(stk, stragegy):
     print("------------------------------------")
 
 if __name__ == '__main__':
-    trade_date = '20201211'
+    trade_date = '20201215'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
@@ -95,20 +95,7 @@ if __name__ == '__main__':
     print("------- RESULTS --------")
     print("------------------------")
     for s in results:
-        if s == 'AMPLITUDE':
-            continue
         print(s + ":")
         for stk in results[s]:
             print(stk.name + " " + stk.code + " " + str(stk.close))
-            show_strategy_check_result(stk, s)
-
-    print("------------------------------")
-    print("------- WATCH RESULTS --------")
-    print("------------------------------")
-    for s in results:
-        if s != 'AMPLITUDE':
-            continue
-        print(s + ":")
-        for stk in results[s]:
-            print(stk.name + " " + stk.code + " " + str(stk.close))
-            show_strategy_check_result(stk, s)
+            # show_strategy_check_result(stk, s)

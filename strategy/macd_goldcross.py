@@ -24,6 +24,8 @@ class MacdGoldCross(Strategy):
         return head > body
 
     def is_recommended(self):
-        # TODO One day earlier
+        # latest 7 days, average amplitude over 3%
+        if not self.is_amplitude_over(7, 3):
+            return False
         return self.is_macd_gold_cross() and self.is_red() and not self.is_head_very_long()
             
