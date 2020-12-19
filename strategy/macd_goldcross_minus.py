@@ -12,12 +12,6 @@ class MacdGoldCrossMinus(Strategy):
                 return False
         return _dif[-1] > _dea[-1] and _macd[-1] > 0
 
-    # is close > open
-    def is_red(self):
-        _open = self.stk.prices['open'].values[-1]
-        _close = self.stk.prices['close'].values[-1]
-        return _close > _open
-
     # check if the head is very long
     def is_head_very_long(self):
         body, tail, head = self.get_body_head_tail()

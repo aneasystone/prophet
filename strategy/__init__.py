@@ -40,19 +40,19 @@ class Strategy:
         return cnt >= days - 1
 
     # check if today's low price is the lowest in recent days
-    def is_lowest(self):
-        _low = self.stk.prices['low'].values[-1]
+    def is_lowest(self, day_offset = -1):
+        _low = self.stk.prices['low'].values[day_offset]
         for i in range(2, 15):
-            if self.stk.prices['low'].values[-i] < _low:
+            if self.stk.prices['low'].values[day_offset] < _low:
                 return False
         return True
 
     # get today's body, head and tail
-    def get_body_head_tail(self):
-        _open = self.stk.prices['open'].values[-1]
-        _close = self.stk.prices['close'].values[-1]
-        _high = self.stk.prices['high'].values[-1]
-        _low = self.stk.prices['low'].values[-1]
+    def get_body_head_tail(self, day_offset = -1):
+        _open = self.stk.prices['open'].values[day_offset]
+        _close = self.stk.prices['close'].values[day_offset]
+        _high = self.stk.prices['high'].values[day_offset]
+        _low = self.stk.prices['low'].values[day_offset]
         if _open > _close:
             body = _open - _close
             tail = _close - _low
@@ -62,6 +62,17 @@ class Strategy:
             tail = _open - _low
             head = _high - _close
         return body, tail, head
+
+    # check if the head is very long
+    def is_head_very_long(self):
+        body, tail, head = self.get_body_head_tail()
+        return head > body
+
+    # is close > open
+    def is_red(self):
+        _open = self.stk.prices['open'].values[-1]
+        _close = self.stk.prices['close'].values[-1]
+        return _close > _open
 
     # check if tomorrow's open price can profit in n days, and calculate the max profit rate
     @abstractmethod
