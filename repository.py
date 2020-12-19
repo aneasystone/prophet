@@ -16,6 +16,12 @@ class Repository:
         df = pd.read_sql(sql=sql, con=engine)
         return df.to_dict("records")
 
+    # get basic of this stock
+    def get_stock_basic(self, code):
+        sql = "SELECT * FROM stock_basic WHERE ts_code = '" + code + "'"
+        df = pd.read_sql(sql=sql, con=engine)
+        return df.to_dict("records")[0]
+
     # get all prices of this stock
     def get_all_prices(self, code):
         if code in self.prices_cache:

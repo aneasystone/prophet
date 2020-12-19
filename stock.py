@@ -12,6 +12,7 @@ class Stock:
     name = ''
     code = ''
     date = ''
+    industry = ''
 
     prices = None
     macd = None
@@ -71,6 +72,10 @@ class Stock:
         if 'ST' in self.name:
             return False
         
+        basic = self.repo.get_stock_basic(self.code)
+        if basic:
+            self.industry = basic['industry']
+
         self.prices = self.get_all_prices()
         self.macd = self.get_macd()
         self.pre_macd = self.get_pre_macd()

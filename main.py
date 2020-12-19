@@ -78,24 +78,25 @@ if __name__ == '__main__':
             #     continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)
-            print(stk.name + " " + stk.code)
+            # print(stk.name + " " + stk.code)
             if stk.init():
                 strategies = sf.match_strategies(stk)
                 if len(strategies) > 0:
-                    print(stk.name + " " + stk.code + " " + str(stk.close) + " " + ",".join(strategies))
+                    print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4:<10}".format(
+                        stk.name, stk.code, str(stk.close), stk.industry, ",".join(strategies), chr(12288)))
                 for s in strategies:
                     if s not in results:
                         results[s] = list()
                     results[s].append(stk)
         except:
-            traceback.print_exc()
+            # traceback.print_exc()
             pass
 
-    print("------------------------")
-    print("------- RESULTS --------")
-    print("------------------------")
-    for s in results:
-        print(s + ":")
-        for stk in results[s]:
-            print(stk.name + " " + stk.code + " " + str(stk.close))
+    # print("------------------------")
+    # print("------- RESULTS --------")
+    # print("------------------------")
+    # for s in results:
+    #     print(s + ":")
+    #     for stk in results[s]:
+    #         print(stk.name + " " + stk.code + " " + str(stk.close))
             # show_strategy_check_result(stk, s)

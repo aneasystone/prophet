@@ -1,31 +1,40 @@
 amplitude_date = "20201218"
 amplitude_stocks = """
-MACDGOLDCROSSMINUS:
-南玻A 000012.SZ 7.21
-浩物股份 000757.SZ 4.73
-省广集团 002400.SZ 5.54
-雅化集团 002497.SZ 18.14
-昊华能源 601101.SH 4.37
-平煤股份 601666.SH 5.9
-新集能源 601918.SH 3.09
-石大胜华 603026.SH 48.16
-金石资源 603505.SH 28.55
-神力股份 603819.SH 11.6
-MACDGOLDCROSS:
-江铃汽车 000550.SZ 20.75
-多氟多 002407.SZ 17.23
-赣锋锂业 002460.SZ 89.4
-中矿资源 002738.SZ 24.41
-科力远 600478.SH 4.63
-厦门钨业 600549.SH 16.5
-开滦股份 600997.SH 6.27
-广汽集团 601238.SH 14.27
-骆驼股份 601311.SH 9.28
-长城汽车 601633.SH 28.97
-联明股份 603006.SH 10.44
-禾望电气 603063.SH 17.93
-HAMMER:
-大参林 603233.SH 78.69
+南玻A　　　　　　　     000012.SZ       7.21            玻璃　　　　　　　　    HAMMERPLUS,MACDGOLDCROSSMINUS
+江铃汽车　　　　　　    000550.SZ       20.75           汽车整车　　　　　　    MACDGOLDCROSS
+粤宏远A　　　　　　     000573.SZ       2.97            区域地产　　　　　　    HAMMERPLUS
+浩物股份　　　　　　    000757.SZ       4.73            汽车配件　　　　　　    MACDGOLDCROSSMINUS
+鲁西化工　　　　　　    000830.SZ       13.6            农药化肥　　　　　　    HAMMERPLUS
+冀中能源　　　　　　    000937.SZ       4.09            煤炭开采　　　　　　    TURNOVER  
+德美化工　　　　　　    002054.SZ       8.47            化工原料　　　　　　    HAMMERPLUS
+金风科技　　　　　　    002202.SZ       13.1            电气设备　　　　　　    HAMMERPLUS
+台海核电　　　　　　    002366.SZ       3.56            专用机械　　　　　　    HAMMER    
+省广集团　　　　　　    002400.SZ       5.54            广告包装　　　　　　    MACDGOLDCROSSMINUS
+多氟多　　　　　　　    002407.SZ       17.23           化工原料　　　　　　    MACDGOLDCROSS
+大金重工　　　　　　    002487.SZ       8.68            钢加工　　　　　　　    HAMMERPLUS
+雅化集团　　　　　　    002497.SZ       18.14           化工原料　　　　　　    MACDGOLDCROSSMINUS
+华西能源　　　　　　    002630.SZ       2.59            专用机械　　　　　　    TURNOVER  
+海洋王　　　　　　　    002724.SZ       7.77            半导体　　　　　　　    HAMMERPLUS
+中矿资源　　　　　　    002738.SZ       24.41           小金属　　　　　　　    MACDGOLDCROSS
+兰花科创　　　　　　    600123.SH       5.89            煤炭开采　　　　　　    TURNOVER  
+科力远　　　　　　　    600478.SH       4.63            元器件　　　　　　　    MACDGOLDCROSS
+上海能源　　　　　　    600508.SH       10.07           煤炭开采　　　　　　    TURNOVER  
+厦门钨业　　　　　　    600549.SH       16.5            小金属　　　　　　　    MACDGOLDCROSS,TURNOVER
+哈投股份　　　　　　    600864.SH       7.6             证券　　　　　　　　    TURNOVER  
+开滦股份　　　　　　    600997.SH       6.27            煤炭开采　　　　　　    MACDGOLDCROSS
+昊华能源　　　　　　    601101.SH       4.37            煤炭开采　　　　　　    MACDGOLDCROSSMINUS
+广汽集团　　　　　　    601238.SH       14.27           汽车整车　　　　　　    MACDGOLDCROSS
+骆驼股份　　　　　　    601311.SH       9.28            电气设备　　　　　　    MACDGOLDCROSS
+中国中冶　　　　　　    601618.SH       2.86            建筑工程　　　　　　    TURNOVER  
+平煤股份　　　　　　    601666.SH       5.9             煤炭开采　　　　　　    MACDGOLDCROSSMINUS
+新集能源　　　　　　    601918.SH       3.09            煤炭开采　　　　　　    MACDGOLDCROSSMINUS
+联明股份　　　　　　    603006.SH       10.44           汽车配件　　　　　　    MACDGOLDCROSS
+禾望电气　　　　　　    603063.SH       17.93           电气设备　　　　　　    HAMMERPLUS,MACDGOLDCROSS
+东方电缆　　　　　　    603606.SH       23.12           电气设备　　　　　　    TURNOVER  
+江苏新能　　　　　　    603693.SH       12.16           新型电力　　　　　　    TURNOVER  
+天域生态　　　　　　    603717.SH       8.25            环境保护　　　　　　    TURNOVER  
+乾景园林　　　　　　    603778.SH       4.54            建筑工程　　　　　　    HAMMERPLUS
+神力股份　　　　　　    603819.SH       11.6            电气设备　　　　　　    MACDGOLDCROSSMINUS
 """
 
 import os
@@ -63,24 +72,9 @@ def get_average_amplitude_dict(stocks):
             average_amplitude_dict[stock['name']] = stk.get_average_amplitude(7)
     return average_amplitude_dict
 
-def align(ss, length=15):
-    if length == 0:
-        return ss
-    slen = len(ss)
-    re = ss
-    if isinstance(ss, str):
-        placeholder = ' '
-    else:
-        placeholder = u'　'
-    while slen < length:
-        re += placeholder
-        slen += 1
-    return re
-
 def show_current_price(stocks):
-    print(align("CODE") + align("NAME") + align("PRE_CLOSE") + align("OPEN") + align("HIGH") + align("LOW") +
-        align("AVG_AMP") + align("AMP") + align("PRICE") + 
-        align("B1") + align("B2") + align("B3") + align("B4"))
+    print("{0:<10}{1:{13}<8}{2:<10}{3:<10}{4:<10}{5:<10}{6:<10}{7:<10}{8:<10}{9:<10}{10:<10}{11:<10}{12:<10}".format(
+        "CODE", "NAME", "PRE_CLOSE", "OPEN", "HIGH", "LOW", "AVG_AMP", "AMP", "PRICE", "B1", "B2", "B3", "B4", chr(12288)))
     for stock in stocks:    
         # if '603002.SH' != stock['symbol'] + '.' + stock['type']:
         #     continue
@@ -93,20 +87,22 @@ def show_current_price(stocks):
         b4 = stock['yestclose'] * (1 - average_amplitude / 100 * 1)
         delta = (b1 - b2) / 2
         current_price = stock['price']
-        
-        info = align(stock['symbol'] + '.' + stock['type']) + \
-                align(stock['name']) + \
-                align("%.2f" % (stock['yestclose'])) + \
-                align("%.2f" % (stock['open'])) + \
-                align("%.2f" % (stock['high'])) + \
-                align("%.2f" % (stock['low'])) + \
-                align("%.2f" % (average_amplitude)) + \
-                align("%.2f" % (current_amplitude)) + \
-                align("%.2f" % (current_price)) + \
-                align("%.2f" % (b1)) + \
-                align("%.2f" % (b2)) + \
-                align("%.2f" % (b3)) + \
-                align("%.2f" % (b4))
+
+        info = "{0:<10}{1:{13}<6}{2:<10}{3:<10}{4:<10}{5:<10}{6:<10}{7:<10}{8:<10}{9:<10}{10:<10}{11:<10}{12:<10}".format(
+            stock['symbol'] + '.' + stock['type'], 
+            stock['name'].replace(' ', ''),
+            "%.2f" % (stock['yestclose']),
+            "%.2f" % (stock['open']),
+            "%.2f" % (stock['high']),
+            "%.2f" % (stock['low']),
+            "%.2f" % (average_amplitude),
+            "%.2f" % (current_amplitude),
+            "%.2f" % (current_price),
+            "%.2f" % (b1),
+            "%.2f" % (b2),
+            "%.2f" % (b3),
+            "%.2f" % (b4),
+            chr(12288))
 
         if b1 + delta > current_price > b1 - delta:
             print_red(info)
