@@ -63,7 +63,7 @@ def show_strategy_check_result(stk, stragegy):
     print("------------------------------------")
 
 if __name__ == '__main__':
-    trade_date = '20201215'
+    trade_date = '20201218'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
@@ -74,8 +74,8 @@ if __name__ == '__main__':
     for ss in stocks:
         try:
             # for debug
-            # if ss['ts_code'] != '603277.SH':
-            #     continue
+            # if ss['ts_code'] != '601899.SH':
+                # continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)
             print(stk.name + " " + stk.code)
@@ -88,7 +88,7 @@ if __name__ == '__main__':
                         results[s] = list()
                     results[s].append(stk)
         except:
-            # traceback.print_exc()
+            traceback.print_exc()
             pass
 
     print("------------------------")

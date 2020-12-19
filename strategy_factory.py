@@ -2,6 +2,7 @@ from strategy.hammer import Hammer
 from strategy.pierce import Pierce
 from strategy.swallow import Swallow
 from strategy.macd_goldcross import MacdGoldCross
+from strategy.macd_goldcross_minus import MacdGoldCrossMinus
 from strategy.river_flower import RiverFlower
 from strategy.red import Red
 from strategy.amplitude import Amplitude
@@ -16,6 +17,7 @@ class StrategyFactory:
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
+            "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
             # "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),

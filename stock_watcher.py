@@ -1,25 +1,31 @@
-amplitude_date = "20201215"
+amplitude_date = "20201218"
 amplitude_stocks = """
-HAMMER:
-川能动力 000155.SZ 6.36
-云铝股份 000807.SZ 8.16
-三花智控 002050.SZ 22.16
-宏创控股 002379.SZ 3.05
-龙星化工 002442.SZ 4.63
-索菲亚 002572.SZ 26.5
-恒力石化 600346.SH 24.7
-新安股份 600596.SH 12.49
-紫金矿业 601899.SH 8.33
-清源股份 603628.SH 10.01
-百利科技 603959.SH 10.95
+MACDGOLDCROSSMINUS:
+南玻A 000012.SZ 7.21
+浩物股份 000757.SZ 4.73
+省广集团 002400.SZ 5.54
+雅化集团 002497.SZ 18.14
+昊华能源 601101.SH 4.37
+平煤股份 601666.SH 5.9
+新集能源 601918.SH 3.09
+石大胜华 603026.SH 48.16
+金石资源 603505.SH 28.55
+神力股份 603819.SH 11.6
 MACDGOLDCROSS:
-云内动力 000903.SZ 4.17
-钱江摩托 000913.SZ 27.3
-佳电股份 000922.SZ 8.26
-湘潭电化 002125.SZ 7.38
-安彩高科 600207.SH 5.93
-通威股份 600438.SH 31.78
-八方股份 603489.SH 178.49
+江铃汽车 000550.SZ 20.75
+多氟多 002407.SZ 17.23
+赣锋锂业 002460.SZ 89.4
+中矿资源 002738.SZ 24.41
+科力远 600478.SH 4.63
+厦门钨业 600549.SH 16.5
+开滦股份 600997.SH 6.27
+广汽集团 601238.SH 14.27
+骆驼股份 601311.SH 9.28
+长城汽车 601633.SH 28.97
+联明股份 603006.SH 10.44
+禾望电气 603063.SH 17.93
+HAMMER:
+大参林 603233.SH 78.69
 """
 
 import os
@@ -79,12 +85,12 @@ def show_current_price(stocks):
         # if '603002.SH' != stock['symbol'] + '.' + stock['type']:
         #     continue
         average_amplitude = 100 * average_amplitude_dict[stock['name']]    
-        current_amplitude = 100 * (stock['price'] - stock['yestclose']) / stock['yestclose']
+        current_amplitude = 100 * (stock['high'] - stock['low']) / stock['yestclose']
 
-        b1 = stock['open'] * (1 - average_amplitude / 100 * 0.25)
-        b2 = stock['open'] * (1 - average_amplitude / 100 * 0.5)
-        b3 = stock['open'] * (1 - average_amplitude / 100 * 0.75)
-        b4 = stock['open'] * (1 - average_amplitude / 100 * 1)
+        b1 = stock['yestclose'] * (1 - average_amplitude / 100 * 0.25)
+        b2 = stock['yestclose'] * (1 - average_amplitude / 100 * 0.5)
+        b3 = stock['yestclose'] * (1 - average_amplitude / 100 * 0.75)
+        b4 = stock['yestclose'] * (1 - average_amplitude / 100 * 1)
         delta = (b1 - b2) / 2
         current_price = stock['price']
         

@@ -1,4 +1,5 @@
 import talib
+import numpy as np
 from repository import Repository
 
 # How to install talib
@@ -14,6 +15,7 @@ class Stock:
 
     prices = None
     macd = None
+    pre_macd = None
     close = 0
     ma5 = None
     ma10 = None
@@ -31,6 +33,14 @@ class Stock:
     # get macd metric of this stock
     def get_macd(self):
         close = self.prices["close"].values
+        return talib.MACD(close, fastperiod = 12, slowperiod = 26, signalperiod = 9)
+
+    # get pre macd metric of this stock, as is, if tomorrow's price rise of 7 days average amplitude
+    def get_pre_macd(self):
+        average_amplitude = self.get_average_amplitude(7)
+        close = self.prices["close"].values
+        possible_high = close[-1] * (1 + average_amplitude / 2)
+        close = np.append(close, possible_high)
         return talib.MACD(close, fastperiod = 12, slowperiod = 26, signalperiod = 9)
 
     # get ma metric of this stock
@@ -63,6 +73,7 @@ class Stock:
         
         self.prices = self.get_all_prices()
         self.macd = self.get_macd()
+        self.pre_macd = self.get_pre_macd()
         self.ma5 = self.get_ma(5)
         self.ma10 = self.get_ma(10)
         self.ma20 = self.get_ma(20)

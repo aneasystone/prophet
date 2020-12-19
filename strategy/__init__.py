@@ -42,11 +42,10 @@ class Strategy:
     # check if today's low price is the lowest in recent days
     def is_lowest(self):
         _low = self.stk.prices['low'].values[-1]
-        count = 0
         for i in range(2, 15):
-            if self.stk.prices['low'].values[-i] <= _low:
-                count += 1
-        return count <= 2
+            if self.stk.prices['low'].values[-i] < _low:
+                return False
+        return True
 
     # get today's body, head and tail
     def get_body_head_tail(self):
