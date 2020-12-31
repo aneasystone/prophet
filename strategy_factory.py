@@ -15,8 +15,8 @@ class StrategyFactory:
         
         # define all strategies here
         strategies = {
-            "HAMMER": Hammer(stk),
-            "HAMMERPLUS": HammerPlus(stk),
+            # "HAMMER": Hammer(stk),
+            # "HAMMERPLUS": HammerPlus(stk),
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
@@ -24,7 +24,7 @@ class StrategyFactory:
             # "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
-            "TURNOVER": Turnover(stk),
+            # "TURNOVER": Turnover(stk),
         }
 
         # which strategy is recommended

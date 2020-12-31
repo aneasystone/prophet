@@ -63,7 +63,7 @@ def show_strategy_check_result(stk, stragegy):
     print("------------------------------------")
 
 if __name__ == '__main__':
-    trade_date = '20201218'
+    trade_date = '20201231'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
@@ -78,12 +78,9 @@ if __name__ == '__main__':
             #     continue
             
             stk = Stock(ss['name'], ss['ts_code'], trade_date)
-            # print(stk.name + " " + stk.code)
+            print(stk.name + " " + stk.code)
             if stk.init():
                 strategies = sf.match_strategies(stk)
-                if len(strategies) > 0:
-                    print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4:<10}".format(
-                        stk.name, stk.code, str(stk.close), stk.industry, ",".join(strategies), chr(12288)))
                 for s in strategies:
                     if s not in results:
                         results[s] = list()
@@ -92,11 +89,26 @@ if __name__ == '__main__':
             # traceback.print_exc()
             pass
 
-    # print("------------------------")
-    # print("------- RESULTS --------")
-    # print("------------------------")
-    # for s in results:
-    #     print(s + ":")
-    #     for stk in results[s]:
-    #         print(stk.name + " " + stk.code + " " + str(stk.close))
+    print("------------------------")
+    print("------- RESULTS --------")
+    print("------------------------")
+    for s in results:
+        print(s + ":-------------------------------------------------------")
+        for stk in results[s]:
+            average_amplitude = stk.get_average_amplitude(7)
+            b1 = stk.close * (1 - average_amplitude * 0.25)
+            b2 = stk.close * (1 - average_amplitude * 0.5)
+            b3 = stk.close * (1 - average_amplitude * 0.75)
+            b4 = stk.close * (1 - average_amplitude * 1)
+            u1 = stk.close * (1 + average_amplitude * 0.25)
+            u2 = stk.close * (1 + average_amplitude * 0.5)
+            u3 = stk.close * (1 + average_amplitude * 0.75)
+            u4 = stk.close * (1 + average_amplitude * 1)
+            delta = "%.2f" % (stk.close * average_amplitude * 0.25)
+
+            print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:{5}<10}".format(
+                stk.name, stk.code, str(stk.close), delta, stk.industry, chr(12288)))
+            print("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (
+                b4, b3, b2, b1, stk.close, u1, u2, u3, u4
+            ))
             # show_strategy_check_result(stk, s)

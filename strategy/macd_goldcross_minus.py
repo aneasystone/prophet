@@ -7,7 +7,7 @@ class MacdGoldCrossMinus(Strategy):
         _dif = self.stk.pre_macd[0]
         _dea = self.stk.pre_macd[1]
         _macd = self.stk.pre_macd[2]
-        for i in range(2, 7):
+        for i in range(2, 15):
             if _dif[-i] > _dea[-i]:
                 return False
         return _dif[-1] > _dea[-1] and _macd[-1] > 0

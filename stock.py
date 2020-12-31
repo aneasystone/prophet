@@ -75,6 +75,7 @@ class Stock:
         basic = self.repo.get_stock_basic(self.code)
         if basic:
             self.industry = basic['industry']
+            self.name = basic['name']
 
         self.prices = self.get_all_prices()
         self.macd = self.get_macd()
