@@ -26,11 +26,10 @@ class Repository:
     def get_all_prices(self, code):
         if code in self.prices_cache:
             return self.prices_cache[code]
-        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "'"
+        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
-        prices = df.sort_values(by = "trade_date", ascending = True)
-        self.prices_cache[code] = prices
-        return prices
+        self.prices_cache[code] = df
+        return df
 
     # get all prices of this stock before someday
     def get_all_prices_before(self, code, date):
@@ -44,7 +43,12 @@ class Repository:
 
     # get all trade dates of this stock
     def get_all_trade_dates(self, code):
-        sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "'"
+        sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
-        df.sort_values(by = "trade_date", ascending = False)
+        return df['trade_date'].values
+
+    # get all trade dates of this stock after someday
+    def get_all_trade_dates_after(self, code, date):
+        sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "' AND trade_date >= '" + date + "' ORDER BY trade_date"
+        df = pd.read_sql(sql=sql, con=engine)
         return df['trade_date'].values

@@ -68,42 +68,23 @@ if __name__ == '__main__':
     updator.update_all_daily_by_trade_date(trade_date)
 
     sf = StrategyFactory()
-    results = {}
-    repo = Repository()
-    stocks = repo.get_all_stocks()
-    for ss in stocks:
-        try:
-            # for debug
-            # if ss['ts_code'] != '600395.SH':
-            #     continue
-            
-            stk = Stock(ss['name'], ss['ts_code'], trade_date)
-            print(stk.name + " " + stk.code)
-            if stk.init():
-                strategies = sf.match_strategies(stk)
-                for s in strategies:
-                    if s not in results:
-                        results[s] = list()
-                    results[s].append(stk)
-        except:
-            # traceback.print_exc()
-            pass
-
+    results = sf.do_strategy(trade_date)
+    
     print("------------------------")
     print("------- RESULTS --------")
     print("------------------------")
     for s in results:
         print(s + ":-------------------------------------------------------")
         for stk in results[s]:
-            average_amplitude = stk.get_average_amplitude(7)
-            b1 = stk.close * (1 - average_amplitude * 0.25)
-            b2 = stk.close * (1 - average_amplitude * 0.5)
-            b3 = stk.close * (1 - average_amplitude * 0.75)
-            b4 = stk.close * (1 - average_amplitude * 1)
-            u1 = stk.close * (1 + average_amplitude * 0.25)
-            u2 = stk.close * (1 + average_amplitude * 0.5)
-            u3 = stk.close * (1 + average_amplitude * 0.75)
-            u4 = stk.close * (1 + average_amplitude * 1)
+            average_amplitude = stk.average_amplitude
+            b1 = stk.get_gear_price(-1)
+            b2 = stk.get_gear_price(-2)
+            b3 = stk.get_gear_price(-3)
+            b4 = stk.get_gear_price(-4)
+            u1 = stk.get_gear_price(1)
+            u2 = stk.get_gear_price(2)
+            u3 = stk.get_gear_price(3)
+            u4 = stk.get_gear_price(4)
             delta = "%.2f" % (stk.close * average_amplitude * 0.25)
 
             print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:{5}<10}".format(

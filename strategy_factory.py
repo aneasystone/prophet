@@ -1,3 +1,6 @@
+from stock import Stock
+from repository import Repository
+
 from strategy.hammer import Hammer
 from strategy.hammer_plus import HammerPlus
 from strategy.pierce import Pierce
@@ -19,7 +22,7 @@ class StrategyFactory:
             # "HAMMERPLUS": HammerPlus(stk),
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
-            "MACDGOLDCROSS": MacdGoldCross(stk),
+            # "MACDGOLDCROSS": MacdGoldCross(stk),
             "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
             # "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
@@ -33,3 +36,26 @@ class StrategyFactory:
             if strategies[s].is_recommended():
                 ss[s] = strategies[s]
         return ss
+
+    def do_strategy(self, trade_date):
+        results = {}
+        repo = Repository()
+        stocks = repo.get_all_stocks()
+        for ss in stocks:
+            try:
+                # for debug
+                # if ss['ts_code'] != '600105.SH':
+                #     continue
+                
+                stk = Stock(ss['name'], ss['ts_code'], trade_date)
+                # print(stk.name + " " + stk.code)
+                if stk.init():
+                    strategies = self.match_strategies(stk)
+                    for s in strategies:
+                        if s not in results:
+                            results[s] = list()
+                        results[s].append(stk)
+            except:
+                # traceback.print_exc()
+                pass
+        return results

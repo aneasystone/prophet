@@ -241,7 +241,7 @@ def get_average_amplitude_dict(stocks):
     for stock in stocks:
         stk = Stock(stock['name'], stock['symbol'] + '.' + stock['type'], amplitude_date)
         if stk.init():
-            average_amplitude_dict[stock['name']] = stk.get_average_amplitude(7)
+            average_amplitude_dict[stock['name']] = stk.average_amplitude
     return average_amplitude_dict
 
 def show_current_price(stocks):

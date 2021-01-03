@@ -21,8 +21,7 @@ class Amplitude(Strategy):
         low = after_prices['low'].values[0]
 
         # calculate a fit buy price
-        average_amplitude = self.stk.get_average_amplitude(7)
-        buy_price = pre_close * (1 - average_amplitude/2)
+        buy_price = pre_close * (1 - self.stk.average_amplitude/2)
         if (buy_price <= low):
             return -999
         high = after_prices['high'].values[n]
