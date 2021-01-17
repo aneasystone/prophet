@@ -33,15 +33,15 @@ class MacdGoldCrossMinus(Strategy):
         if not self.is_amplitude_over(7, 3):
             return False
 
-        # ma is still open
+        # ma is close
         #
         if self.is_pre_ma_open():
             return False
 
-        # dif is too high
+        # dif is low
         #
-        if not self.is_dif_low():
-            return False
+        if self.is_dif_low():
+            self.stk.features.append('DIF_LOW')
 
         # not red
         #

@@ -2,8 +2,8 @@ from stock import Stock
 
 if __name__ == '__main__':
 
-    date = "20201230"
-    stocks = ["601598.SH", "000545.SZ", "600707.SH", "600733.SH"]
+    date = "20210108"
+    stocks = ["600707.SH"]
     for stock in stocks:
         stk = Stock('', stock, date)
         if stk.init():

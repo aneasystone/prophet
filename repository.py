@@ -52,3 +52,9 @@ class Repository:
         sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "' AND trade_date >= '" + date + "' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
         return df['trade_date'].values
+
+    # get all trade dates of this stock between two days
+    def get_all_trade_dates_between(self, code, begin, end):
+        sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "' AND trade_date >= '" + begin + "' AND trade_date < '" + end + "' ORDER BY trade_date"
+        df = pd.read_sql(sql=sql, con=engine)
+        return df['trade_date'].values

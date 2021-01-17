@@ -63,7 +63,7 @@ def show_strategy_check_result(stk, stragegy):
     print("------------------------------------")
 
 if __name__ == '__main__':
-    trade_date = '20201231'
+    trade_date = '20210115'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
@@ -87,8 +87,8 @@ if __name__ == '__main__':
             u4 = stk.get_gear_price(4)
             delta = "%.2f" % (stk.close * average_amplitude * 0.25)
 
-            print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:{5}<10}".format(
-                stk.name, stk.code, str(stk.close), delta, stk.industry, chr(12288)))
+            print("{0:{6}<10}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:{6}<10}\t{5}".format(
+                stk.name, stk.code, str(stk.close), delta, stk.industry, ", ".join(stk.features), chr(12288)))
             print("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (
                 b4, b3, b2, b1, stk.close, u1, u2, u3, u4
             ))

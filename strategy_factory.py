@@ -1,6 +1,8 @@
 from stock import Stock
 from repository import Repository
 
+import traceback
+
 from strategy.hammer import Hammer
 from strategy.hammer_plus import HammerPlus
 from strategy.pierce import Pierce
@@ -23,8 +25,8 @@ class StrategyFactory:
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
             # "MACDGOLDCROSS": MacdGoldCross(stk),
-            "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            # "RIVERFLOWER": RiverFlower(stk),
+            # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
+            "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
@@ -44,7 +46,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '600105.SH':
+                # if ss['ts_code'] != '000157.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
@@ -56,6 +58,6 @@ class StrategyFactory:
                             results[s] = list()
                         results[s].append(stk)
             except:
-                # traceback.print_exc()
+                traceback.print_exc()
                 pass
         return results

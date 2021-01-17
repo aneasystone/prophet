@@ -14,6 +14,8 @@ class Stock:
     date = ''
     industry = ''
 
+    features = None
+
     prices = None
     close = 0
     average_amplitude = None
@@ -32,6 +34,7 @@ class Stock:
         self.name = name
         self.code = code
         self.date = date
+        self.features = []
         
     # get all prices of this stock
     def get_all_prices(self):
