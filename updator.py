@@ -27,11 +27,12 @@ class Updator:
         sql = "SELECT * FROM daily WHERE trade_date = '" + trade_date + "'"
         df = pd.read_sql(sql=sql, con=engine)
         if df.empty:
-            print('Data is empty, update by tushare api')
+            # print('Data is empty, update by tushare api')
             df = pro.daily(trade_date = trade_date)
             df.to_sql('daily', engine, index=False, if_exists='append', chunksize=5000)
         else:
-            print('Data is not empty, ignore updating ...')
+            # print('Data is not empty, ignore updating ...')
+            pass
 
 if __name__ == '__main__':
     

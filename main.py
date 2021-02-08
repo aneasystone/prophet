@@ -4,92 +4,52 @@ from repository import Repository
 from updator import Updator
 from strategy_factory import StrategyFactory
 
-def show_strategy_check_result(stk, stragegy):
+def print_green(s):
+    print(f"\033[0;32;40m%s\033[0m" % (s))
+
+def print_red(s):
+    print(f"\033[0;31;40m%s\033[0m" % (s))
+
+def show_recommended(trade_date):
     
-    all_statistics = []
-    miss_statistics = []
-    try:
-        sf = StrategyFactory()
-        repo = Repository()
-        dates = repo.get_all_trade_dates(stk.code)
-        for date in dates:
-            try:
-                stk = Stock(stk.name, stk.code, date)
-                if stk.init():
-                    strategies = sf.match_strategies(stk)
-                    statistics = strategies[stragegy].get_profit_statistics()
-                    if statistics:
-                        all_statistics.append(statistics)
-                        miss_statistics.append(0)
-                    else:
-                        miss_statistics.append(1)
-            except:
-                # traceback.print_exc()
-                pass
-    except:
-        # traceback.print_exc()
-        pass
-
-    print("-------- RISE RATE ---------------")
-    if len(all_statistics) > 0:
-        for d in range(0, 30):
-            cnt = 0
-            for stat in all_statistics:
-                if stat[d] > 0:
-                    cnt += 1
-            print("%.2f" % (100*cnt/len(all_statistics)), end=" ")
-        print("")
-    else:
-        print("NO DATA")
-    print("-------- PROFIT RATE ---------------")
-    if len(all_statistics) > 0:
-        for d in range(0, 30):
-            sum = 0
-            for stat in all_statistics:
-                sum += stat[d]
-            print("%.2f" % (100*sum/len(all_statistics)), end=" ")
-        print("")
-    else:
-        print("NO DATA")
-    print("-------- MISS RATE ---------------")
-    if len(miss_statistics) > 0:
-        cnt = 0
-        for stat in miss_statistics:
-            if stat:
-                cnt += 1
-        print("%.2f" % (100*cnt/len(miss_statistics)))
-    else:
-        print("NO DATA")
-    print("------------------------------------")
-
-if __name__ == '__main__':
-    trade_date = '20210115'
     updator = Updator()
     updator.update_all_daily_by_trade_date(trade_date)
 
+    repo = Repository()
     sf = StrategyFactory()
     results = sf.do_strategy(trade_date)
-    
-    print("------------------------")
-    print("------- RESULTS --------")
-    print("------------------------")
-    for s in results:
-        print(s + ":-------------------------------------------------------")
-        for stk in results[s]:
-            average_amplitude = stk.average_amplitude
-            b1 = stk.get_gear_price(-1)
-            b2 = stk.get_gear_price(-2)
-            b3 = stk.get_gear_price(-3)
-            b4 = stk.get_gear_price(-4)
-            u1 = stk.get_gear_price(1)
-            u2 = stk.get_gear_price(2)
-            u3 = stk.get_gear_price(3)
-            u4 = stk.get_gear_price(4)
-            delta = "%.2f" % (stk.close * average_amplitude * 0.25)
 
-            print("{0:{6}<10}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:{6}<10}\t{5}".format(
-                stk.name, stk.code, str(stk.close), delta, stk.industry, ", ".join(stk.features), chr(12288)))
-            print("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (
-                b4, b3, b2, b1, stk.close, u1, u2, u3, u4
-            ))
-            # show_strategy_check_result(stk, s)
+    for s in results:
+        print("=== " + trade_date + " ===")
+        print("=== " + s + " ===")
+        red = 0
+        green = 0
+        for stk in results[s]:
+            delta = '--'
+            after_prices = repo.get_all_prices_after(stk.code, trade_date)
+            if after_prices['open'].values.any():
+                _close = after_prices['close'].values[0]
+                _open = after_prices['open'].values[0]
+                delta = "%.2f" % ((_close-_open)/_open*100)
+
+            info = "{0:{6}<10}\t{1:<10}\t{2:<10}\t{3:{6}<10}\t{4}\t{5:<10}".format(
+                stk.name, stk.code, str(stk.close), stk.industry, ", ".join(stk.features), delta, chr(12288))
+            if '--' in delta:
+                print(info)
+            elif '-' in delta:
+                print_green(info)
+                green += 1
+            else:
+                print_red(info)
+                red += 1
+        print("=== %d red, %d green ===" % (red, green))
+
+if __name__ == '__main__':
+
+    trade_date = '20210208'
+    show_recommended(trade_date)
+
+    # repo = Repository()
+    # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20210130')
+    # for date in dates:
+    #     show_recommended(date)

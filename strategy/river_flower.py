@@ -23,6 +23,11 @@ class RiverFlower(Strategy):
         # print("%.4f %.4f" % (d_5_10, d_10_20))
         return d_5_10 < 0.01 and d_10_20 < 0.01
 
+    def is_ma5_too_low(self, ma5, ma10):
+        d_5_10 = (ma10-ma5)/ma5
+        # print("%.2f %.2f %.2f" % (ma5, ma10, d_5_10))
+        return d_5_10 > 0.01
+
     # check if the ma's trend is opening
     def is_ma_opening(self):
 
@@ -31,8 +36,15 @@ class RiverFlower(Strategy):
             return False
         
         # ma is close in last 20 days
+        very_red_days = 1
         for i in range(2, 22):
+            if self.is_ma5_too_low(self.stk.ma5[-i], self.stk.ma10[-i]):
+                return False
+            if self.is_very_red(-i):
+                very_red_days += 1
             if self.is_ma_close(self.stk.ma5[-i], self.stk.ma10[-i], self.stk.ma20[-i]):
+                self.stk.features.append('MA_OPEN_' + str(i))
+                self.stk.features.append('MA_RED_' + str(very_red_days))
                 return True
         return False
 
@@ -42,16 +54,16 @@ class RiverFlower(Strategy):
         return today_close > self.stk.ma5[-1]
 
     # rate +5%
-    def is_very_red(self):
-        today_close = self.stk.prices['close'].values[-1]
-        yesterday_close = self.stk.prices['close'].values[-2]
+    def is_very_red(self, i):
+        today_close = self.stk.prices['close'].values[i]
+        yesterday_close = self.stk.prices['close'].values[i-1]
         rate = (today_close - yesterday_close) / yesterday_close * 100
         return rate >= 5
 
     # check if the kline state is The flower on river
     # a positive kline upon one or more ma lines (moving average)
     def is_river_flower(self):
-        return self.is_very_red() and self.is_close_upon_ma() and self.is_ma_opening()
+        return self.is_very_red(-1) and self.is_close_upon_ma() and self.is_ma_opening()
 
     def is_recommended(self):
         return self.is_river_flower()
