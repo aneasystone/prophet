@@ -4,10 +4,12 @@ class MacdRevert(Strategy):
     
     # check if macd revert from red to green, and convert to red again
     def is_macd_revert(self):
-
+        _dif = self.stk.macd[0]
+        _dea = self.stk.macd[1]
+        if _dif[-1] < 0 and _dea[-1] < 0:
+            return False
         _macd = self.stk.macd[2]
-        if _macd[-1] < 0 or _macd[-2] >= 0:
-            
+        if _macd[-1] < 0 or _macd[-2] >= 0:    
             return False
         
         red_days = 0

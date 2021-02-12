@@ -207,8 +207,8 @@ if __name__ == '__main__':
         selected = select_stocks(results)
         for stk in selected:
             try:
-                # show_result_of_buy_0985_and_sell_1015_in_3_days(stk, dates, i)
-                show_result_of_buy_close_and_sell_103_in_3_days(stk, dates, i)
+                show_result_of_buy_0985_and_sell_1015_in_3_days(stk, dates, i)
+                # show_result_of_buy_close_and_sell_103_in_3_days(stk, dates, i)
             except:
                 # traceback.print_exc()
                 pass

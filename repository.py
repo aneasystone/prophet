@@ -9,6 +9,7 @@ engine = create_engine('mysql+pymysql://root:123456@localhost:3306/stock')
 class Repository:
 
     prices_cache = {}
+    stock_cache = {}
 
     # get all stocks
     def get_all_stocks(self):
@@ -18,15 +19,20 @@ class Repository:
 
     # get basic of this stock
     def get_stock_basic(self, code):
+        if code in self.stock_cache:
+            return self.stock_cache[code]
         sql = "SELECT * FROM stock_basic WHERE ts_code = '" + code + "'"
         df = pd.read_sql(sql=sql, con=engine)
-        return df.to_dict("records")[0]
+        stock_basic = df.to_dict("records")[0]
+        self.stock_cache[code] = stock_basic
+        return stock_basic
 
     # get all prices of this stock
     def get_all_prices(self, code):
         if code in self.prices_cache:
             return self.prices_cache[code]
-        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
+        # sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
+        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
         self.prices_cache[code] = df
         return df
