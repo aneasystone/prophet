@@ -14,6 +14,7 @@ from strategy.red import Red
 from strategy.amplitude import Amplitude
 from strategy.turnover import Turnover
 from strategy.macd_revert import MacdRevert
+from strategy.ma_open_red import MaOpenRed
 
 class StrategyFactory:
 
@@ -27,11 +28,12 @@ class StrategyFactory:
             # "SWALLOW": Swallow(stk),
             # "MACDGOLDCROSS": MacdGoldCross(stk),
             # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            "RIVERFLOWER": RiverFlower(stk),
+            # "RIVERFLOWER": RiverFlower(stk),
             # "MACDREVERT": MacdRevert(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
+            "MAOPENRED": MaOpenRed(stk),
         }
 
         # which strategy is recommended
@@ -48,7 +50,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '002191.SZ':
+                # if ss['ts_code'] != '002230.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

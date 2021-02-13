@@ -46,7 +46,7 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20210208'
+    trade_date = '20210210'
     show_recommended(trade_date)
 
     # repo = Repository()
