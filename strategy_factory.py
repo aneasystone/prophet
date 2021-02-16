@@ -14,6 +14,7 @@ from strategy.red import Red
 from strategy.amplitude import Amplitude
 from strategy.turnover import Turnover
 from strategy.macd_revert import MacdRevert
+from strategy.ma_open import MaOpen
 from strategy.ma_open_red import MaOpenRed
 
 class StrategyFactory:
@@ -33,6 +34,8 @@ class StrategyFactory:
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
+            
+            "MAOPEN": MaOpen(stk),
             "MAOPENRED": MaOpenRed(stk),
         }
 
