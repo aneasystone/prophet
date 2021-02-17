@@ -15,5 +15,6 @@ class MaOpen(Strategy):
 
     def is_recommended(self):
         ma_open_days = self.get_ma_open_days()
-        return ma_open_days == 10
+        self.stk.features.append('MA_OPEN_%02d' % (ma_open_days))
+        return ma_open_days >= 5
 

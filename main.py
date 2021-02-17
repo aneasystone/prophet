@@ -10,6 +10,12 @@ def print_green(s):
 def print_red(s):
     print(f"\033[0;31;40m%s\033[0m" % (s))
 
+def get_stk_features(stk):
+    return ", ".join(stk.features)
+
+def sort_by_features(stks):
+    return sorted(stks, key=get_stk_features)
+
 def show_recommended(trade_date):
     
     updator = Updator()
@@ -24,7 +30,8 @@ def show_recommended(trade_date):
         print("=== " + s + " ===")
         red = 0
         green = 0
-        for stk in results[s]:
+        stks = sort_by_features(results[s])
+        for stk in stks:
             delta = '--'
             after_prices = repo.get_all_prices_after(stk.code, trade_date)
             if after_prices['open'].values.any():

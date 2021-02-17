@@ -36,7 +36,7 @@ class StrategyFactory:
             # "TURNOVER": Turnover(stk),
             
             "MAOPEN": MaOpen(stk),
-            "MAOPENRED": MaOpenRed(stk),
+            # "MAOPENRED": MaOpenRed(stk),
         }
 
         # which strategy is recommended
