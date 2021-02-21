@@ -28,6 +28,30 @@ def print_result(stk, profit_rate, buy_miss = False):
         else:
             print_green(info)
 
+def show_result_of_buy_open_and_sell_trend_break(stk, dates, i):
+    Result.total_cnt += 1
+    prices = repo.get_all_prices_after(stk.code, dates[i])
+
+    # BUY DAY
+    buy_price = prices['open'].values[0]
+    highest_price = prices['high'].values[0]
+    day = 1
+    
+    while True:
+        low_price = prices['low'].values[day]
+        high_price = prices['high'].values[day]
+        # print(day, low_price, high_price, highest_price)
+        if (low_price-highest_price)/highest_price < -0.06:
+            sell_price = prices['close'].values[day]
+            profit_rate = (sell_price-buy_price)/buy_price * 100
+            Result.total_profit_rate += profit_rate
+            print_result(stk, profit_rate)
+            break
+        else:
+            highest_price = high_price if high_price > highest_price else highest_price
+        day += 1
+
+
 def show_result_of_buy_close_and_sell_103_in_3_days(stk, dates, i):
     Result.total_cnt += 1
     prices = repo.get_all_prices_after(stk.code, dates[i])
@@ -188,7 +212,7 @@ def select_stocks(results):
 if __name__ == '__main__':
 
     repo = Repository()
-    dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210208')
+    dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210101')
     # print(dates)
     for i in range(0, len(dates)):
         date = dates[i]
@@ -208,9 +232,10 @@ if __name__ == '__main__':
         for stk in selected:
             try:
                 # show_result_of_buy_0985_and_sell_1015_in_3_days(stk, dates, i)
-                show_result_of_buy_close_and_sell_103_in_3_days(stk, dates, i)
+                # show_result_of_buy_close_and_sell_103_in_3_days(stk, dates, i)
+                show_result_of_buy_open_and_sell_trend_break(stk, dates, i)
             except:
-                # traceback.print_exc()
+                traceback.print_exc()
                 pass
 
         print("-----------------------------")
