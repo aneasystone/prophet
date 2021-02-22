@@ -36,9 +36,9 @@ class StrategyFactory:
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
             
-            # "MAOPEN": MaOpen(stk),
+            "MAOPEN": MaOpen(stk),
             # "MAOPENRED": MaOpenRed(stk),
-            "MAOPENLOW": MaOpenLow(stk),
+            # "MAOPENLOW": MaOpenLow(stk),
         }
 
         # which strategy is recommended

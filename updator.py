@@ -34,6 +34,13 @@ class Updator:
             # print('Data is not empty, ignore updating ...')
             pass
 
+    def save_results(self, trade_date, strategy, stks):
+        rs = []
+        for stk in stks:
+            rs.append([trade_date, stk.code, strategy, ", ".join(stk.features)])
+        df = pd.DataFrame(rs, columns=['trade_date', 'ts_code', 'strategy', 'features'])
+        df.to_sql('results', engine, index=False, if_exists='append', chunksize=5000)
+
 if __name__ == '__main__':
     
     updator = Updator()
