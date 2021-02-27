@@ -10,6 +10,22 @@ def get_stk_features(stk):
 def sort_by_features(stks):
     return sorted(stks, key=get_stk_features)
 
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'little')
+
+def write_sel(stks):
+    with open('x.sel', 'wb') as f:
+        f.write(int_to_bytes(len(stks)))
+        f.write(bytes([0]))
+        for stk in stks:
+            xs = stk.code.split('.')
+            if xs[1] == 'SH':
+                f.write(bytes([0x07, 0x11]))
+                f.write(bytes(xs[0], encoding='utf-8'))
+            else:
+                f.write(bytes([0x07, 0x21]))
+                f.write(bytes(xs[0], encoding='utf-8'))
+
 def show_recommended(trade_date):
     
     updator = Updator()
@@ -25,13 +41,14 @@ def show_recommended(trade_date):
         for stk in stks:
             print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4}".format(
                 stk.name, stk.code, str(stk.close), stk.industry, ", ".join(stk.features), chr(12288)))
-        updator.save_results(trade_date, s, stks)
+        # updator.save_results(trade_date, s, stks)
+        write_sel(stks)
 
 if __name__ == '__main__':
 
-    trade_date = '20210222'
+    trade_date = '20210227'
     show_recommended(trade_date)
-
+    
     # repo = Repository()
     # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20210301')
     # for date in dates:
