@@ -52,6 +52,12 @@ class Stock:
         close = np.append(close, possible_high)
         return talib.MACD(close, fastperiod = 12, slowperiod = 26, signalperiod = 9)
 
+    # get week macd metric of this stock
+    def get_week_macd(self):
+        close = self.prices["close"].values
+        week_close = close[len(close)%5-1::5]
+        return talib.MACD(week_close, fastperiod = 12, slowperiod = 26, signalperiod = 9)
+
     # get ma metric of this stock
     def get_ma(self, timeperiod):
         close = self.prices["close"].values
@@ -63,6 +69,12 @@ class Stock:
         possible_high = close[-1] * (1 + self.average_amplitude / 2)
         close = np.append(close, possible_high)
         return talib.SMA(close, timeperiod = timeperiod)
+
+    # get week ma metric of this stock
+    def get_week_ma(self, timeperiod):
+        close = self.prices["close"].values
+        week_close = close[len(close)%5-1::5]
+        return talib.SMA(week_close, timeperiod = timeperiod)
 
     # get average amplitude
     def get_average_amplitude(self, days):
@@ -106,6 +118,7 @@ class Stock:
 
         self.macd = self.get_macd()
         self.pre_macd = self.get_pre_macd()
+        self.week_macd = self.get_week_macd()
         
         self.ma5 = self.get_ma(5)
         self.ma10 = self.get_ma(10)
@@ -113,5 +126,8 @@ class Stock:
         self.pre_ma5 = self.get_pre_ma(5)
         self.pre_ma10 = self.get_pre_ma(10)
         self.pre_ma20 = self.get_pre_ma(20)
+        self.week_ma5 = self.get_week_ma(5)
+        self.week_ma10 = self.get_week_ma(10)
+        self.week_ma20 = self.get_week_ma(20)
         
         return True

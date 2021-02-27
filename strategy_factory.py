@@ -17,6 +17,9 @@ from strategy.macd_revert import MacdRevert
 from strategy.ma_open import MaOpen
 from strategy.ma_open_red import MaOpenRed
 from strategy.ma_open_low import MaOpenLow
+from strategy.year_lowest import YearLowest
+from strategy.year_double import YearDouble
+from strategy.week_ma_open import WeekMaOpen
 
 class StrategyFactory:
 
@@ -36,9 +39,12 @@ class StrategyFactory:
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
             
-            "MAOPEN": MaOpen(stk),
+            # "MAOPEN": MaOpen(stk),
             # "MAOPENRED": MaOpenRed(stk),
             # "MAOPENLOW": MaOpenLow(stk),
+            # "YEARLOWEST": YearLowest(stk),
+            # "YEARDOUBLE": YearDouble(stk),
+            "WEEKMAOPEN": WeekMaOpen(stk),
         }
 
         # which strategy is recommended
@@ -55,7 +61,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '603699.SH':
+                # if ss['ts_code'] != '000004.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
