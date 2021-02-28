@@ -1,7 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
-engine = create_engine('mysql+pymysql://root:123456@localhost:3306/stock')
+engine = create_engine('mysql+pymysql://root:123456@192.168.0.107:3306/stock')
 
 # Using SQLAlchemy
 # https://www.liaoxuefeng.com/wiki/897692888725344/955081460091040

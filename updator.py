@@ -8,7 +8,7 @@ from repository import Repository
 # https://waditu.com/document/2?doc_id=27
 
 pro = ts.pro_api("a5a9fbdbf64462122f1c3281c54b3bd3fa0982e54c20c44977b2d72f")
-engine = create_engine('mysql+pymysql://root:123456@localhost:3306/stock')
+engine = create_engine('mysql+pymysql://root:123456@192.168.0.107:3306/stock')
 
 class Updator:
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     updator = Updator()
     repo = Repository()
 
-    first_run = False
+    first_run = True
 
     if first_run:
         # Run this in the first time

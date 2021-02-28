@@ -31,9 +31,9 @@ class StrategyFactory:
             # "HAMMERPLUS": HammerPlus(stk),
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
-            # "MACDGOLDCROSS": MacdGoldCross(stk),
+            "MACDGOLDCROSS": MacdGoldCross(stk),
             # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            # "RIVERFLOWER": RiverFlower(stk),
+            "RIVERFLOWER": RiverFlower(stk),
             # "MACDREVERT": MacdRevert(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
@@ -41,10 +41,10 @@ class StrategyFactory:
             
             # "MAOPEN": MaOpen(stk),
             # "MAOPENRED": MaOpenRed(stk),
-            # "MAOPENLOW": MaOpenLow(stk),
+            "MAOPENLOW": MaOpenLow(stk),
             # "YEARLOWEST": YearLowest(stk),
             # "YEARDOUBLE": YearDouble(stk),
-            "WEEKMAOPEN": WeekMaOpen(stk),
+            # "WEEKMAOPEN": WeekMaOpen(stk),
         }
 
         # which strategy is recommended
@@ -65,7 +65,7 @@ class StrategyFactory:
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
-                # print(stk.name + " " + stk.code)
+                print(stk.name + " " + stk.code)
                 if stk.init():
                     strategies = self.match_strategies(stk)
                     for s in strategies:

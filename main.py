@@ -13,8 +13,8 @@ def sort_by_features(stks):
 def int_to_bytes(x: int) -> bytes:
     return x.to_bytes((x.bit_length() + 7) // 8, 'little')
 
-def write_sel(stks):
-    with open('x.sel', 'wb') as f:
+def write_sel(strategy, trade_date, stks):
+    with open(strategy + '_' + trade_date + '.sel', 'wb') as f:
         f.write(int_to_bytes(len(stks)))
         f.write(bytes([0]))
         for stk in stks:
@@ -42,11 +42,11 @@ def show_recommended(trade_date):
             print("{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4}".format(
                 stk.name, stk.code, str(stk.close), stk.industry, ", ".join(stk.features), chr(12288)))
         # updator.save_results(trade_date, s, stks)
-        write_sel(stks)
+        # write_sel(s, trade_date, stks)
 
 if __name__ == '__main__':
 
-    trade_date = '20210227'
+    trade_date = '20210226'
     show_recommended(trade_date)
     
     # repo = Repository()
