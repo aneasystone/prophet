@@ -10,12 +10,16 @@ class Repository:
 
     prices_cache = {}
     stock_cache = {}
+    all_stocks_cache = None
 
     # get all stocks
     def get_all_stocks(self):
+        if self.all_stocks_cache != None:
+            return self.all_stocks_cache
         sql = "SELECT * FROM stock_basic"
         df = pd.read_sql(sql=sql, con=engine)
-        return df.to_dict("records")
+        self.all_stocks_cache = df.to_dict("records")
+        return self.all_stocks_cache
 
     # get basic of this stock
     def get_stock_basic(self, code):

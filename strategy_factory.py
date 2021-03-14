@@ -20,8 +20,12 @@ from strategy.ma_open_low import MaOpenLow
 from strategy.year_lowest import YearLowest
 from strategy.year_double import YearDouble
 from strategy.week_ma_open import WeekMaOpen
+from strategy.breakthrough import BreakThrough
 
 class StrategyFactory:
+
+    def __init__(self, repo):
+        self.repo = repo
 
     def match_strategies(self, stk):
         
@@ -31,9 +35,9 @@ class StrategyFactory:
             # "HAMMERPLUS": HammerPlus(stk),
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
-            "MACDGOLDCROSS": MacdGoldCross(stk),
+            # "MACDGOLDCROSS": MacdGoldCross(stk),
             # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            "RIVERFLOWER": RiverFlower(stk),
+            # "RIVERFLOWER": RiverFlower(stk),
             # "MACDREVERT": MacdRevert(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
@@ -41,10 +45,11 @@ class StrategyFactory:
             
             # "MAOPEN": MaOpen(stk),
             # "MAOPENRED": MaOpenRed(stk),
-            "MAOPENLOW": MaOpenLow(stk),
+            # "MAOPENLOW": MaOpenLow(stk),
             # "YEARLOWEST": YearLowest(stk),
             # "YEARDOUBLE": YearDouble(stk),
             # "WEEKMAOPEN": WeekMaOpen(stk),
+            "BREAKTHROUGH": BreakThrough(stk),
         }
 
         # which strategy is recommended
@@ -56,16 +61,15 @@ class StrategyFactory:
 
     def do_strategy(self, trade_date):
         results = {}
-        repo = Repository()
-        stocks = repo.get_all_stocks()
+        stocks = self.repo.get_all_stocks()
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000004.SZ':
-                #     continue
+                if ss['ts_code'] != '002594.SZ':
+                    continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
-                print(stk.name + " " + stk.code)
+                # print(stk.name + " " + stk.code)
                 if stk.init():
                     strategies = self.match_strategies(stk)
                     for s in strategies:

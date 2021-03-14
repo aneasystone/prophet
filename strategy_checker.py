@@ -7,8 +7,8 @@ if __name__ == '__main__':
 
     all_statistics = {}
 
-    sf = StrategyFactory()
     repo = Repository()
+    sf = StrategyFactory(repo)
     stocks = repo.get_all_stocks()
     for ss in stocks:
         try:

@@ -226,7 +226,7 @@ if __name__ == '__main__':
         Result.sell_miss_cnt = 0
         Result.total_profit_rate = 0
 
-        sf = StrategyFactory()
+        sf = StrategyFactory(repo)
         results = sf.do_strategy(date)
         selected = select_stocks(results)
         for stk in selected:

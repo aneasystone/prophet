@@ -24,10 +24,10 @@ class Updator:
 
     # update the price of all stock of someday
     def update_all_daily_by_trade_date(self, trade_date):
-        sql = "SELECT * FROM daily WHERE trade_date = '" + trade_date + "'"
+        sql = "SELECT * FROM daily WHERE trade_date = '" + trade_date + "' LIMIT 1"
         df = pd.read_sql(sql=sql, con=engine)
         if df.empty:
-            # print('Data is empty, update by tushare api')
+            print('Data is empty, update by tushare api')
             df = pro.daily(trade_date = trade_date)
             df.to_sql('daily', engine, index=False, if_exists='append', chunksize=5000)
         else:
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     updator = Updator()
     repo = Repository()
 
-    first_run = True
+    first_run = False
 
     if first_run:
         # Run this in the first time
@@ -63,4 +63,4 @@ if __name__ == '__main__':
                 traceback.print_exc()
     else:
         # Run this everyday
-        updator.update_all_daily_by_trade_date('20201127')
+        updator.update_all_daily_by_trade_date('20210303')
