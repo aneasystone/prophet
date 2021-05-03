@@ -8,14 +8,14 @@ from repository import Repository
 # https://waditu.com/document/2?doc_id=27
 
 pro = ts.pro_api("a5a9fbdbf64462122f1c3281c54b3bd3fa0982e54c20c44977b2d72f")
-engine = create_engine('mysql+pymysql://root:123456@192.168.0.107:3306/stock')
+engine = create_engine('mysql+pymysql://root:123456@localhost:3306/stock')
 
 class Updator:
 
     # update all stocks
     def update_all_stock_basic(self):
         df = pro.query('stock_basic', exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
-        df.to_sql('stock_basic', engine, index=False, if_exists='replace', chunksize=5000)
+        df.to_sql('stock_basic', engine, index=False, if_exists='append', chunksize=5000)
 
     # update all prices of this stock
     def update_all_daily_by_code(self, code):

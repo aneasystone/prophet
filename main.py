@@ -45,7 +45,7 @@ def int_to_bytes(x: int) -> bytes:
     return x.to_bytes((x.bit_length() + 7) // 8, 'little')
 
 def write_sel(strategy, trade_date, stks):
-    with open(strategy + '_' + trade_date + '.sel', 'wb') as f:
+    with open('sel/' + strategy + '_' + trade_date + '.sel', 'wb') as f:
         f.write(int_to_bytes(len(stks)))
         f.write(bytes([0]))
         for stk in stks:
@@ -72,13 +72,13 @@ def show_recommended(trade_date):
         for stk in stks:
             show_stock_result(trade_date, stk)
         # updator.save_results(trade_date, s, stks)
-        # write_sel(s, trade_date, stks)
+        write_sel(s, trade_date, stks)
 
 if __name__ == '__main__':
 
-    # trade_date = '20210104'
+    # trade_date = '20210430'
     # show_recommended(trade_date)
     
-    dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210313')
+    dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20210501')
     for date in dates:
         show_recommended(date)
