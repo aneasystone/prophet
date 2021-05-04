@@ -76,21 +76,23 @@ class RisingWave(Strategy):
         troughs = []
         peaks = []
         dates = []
-        is_buy_point = False
+        now_is_trough = False
         for d in range(60,0,-1):
             today_close = self.stk.prices['close'].values[-d]
             today = self.stk.prices['trade_date'].values[-d]
             if self.is_crest(d):
+                now_is_trough = False
                 crests.append(today_close)
                 peaks.append(today_close)
                 dates.append(today)
             if self.is_trough(d):
-                is_buy_point = d == 1
+                now_is_trough = True
                 troughs.append(today_close)
                 peaks.append(today_close)
                 dates.append(today)
         
-        if len(crests) >= 3 and len(troughs) >= 2 and is_buy_point:
+        today = self.stk.prices['trade_date'].values[-1]
+        if len(crests) >= 3 and len(troughs) >= 2 and now_is_trough and today != dates[-1]:
             self.save_wave_jpg(dates, peaks)
             return True
         return False

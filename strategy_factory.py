@@ -22,6 +22,7 @@ from strategy.year_double import YearDouble
 from strategy.week_ma_open import WeekMaOpen
 from strategy.breakthrough import BreakThrough
 from strategy.rising_wave import RisingWave
+from strategy.step_on_ma20 import StepOnMa20
 
 class StrategyFactory:
 
@@ -51,7 +52,8 @@ class StrategyFactory:
             # "YEARDOUBLE": YearDouble(stk),
             # "WEEKMAOPEN": WeekMaOpen(stk),
             # "BREAKTHROUGH": BreakThrough(stk),
-            "RISINGWAVE": RisingWave(stk),
+            # "RISINGWAVE": RisingWave(stk),
+            "STEPONMA20": StepOnMa20(stk),
         }
 
         # which strategy is recommended
@@ -67,7 +69,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '600272.SH':
+                # if ss['ts_code'] != '603987.SH':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
