@@ -52,8 +52,8 @@ class StrategyFactory:
             # "YEARDOUBLE": YearDouble(stk),
             # "WEEKMAOPEN": WeekMaOpen(stk),
             # "BREAKTHROUGH": BreakThrough(stk),
-            # "RISINGWAVE": RisingWave(stk),
-            "STEPONMA20": StepOnMa20(stk),
+            "RISINGWAVE": RisingWave(stk),
+            # "STEPONMA20": StepOnMa20(stk),
         }
 
         # which strategy is recommended
@@ -69,7 +69,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '603987.SH':
+                # if ss['ts_code'] != '000014.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
