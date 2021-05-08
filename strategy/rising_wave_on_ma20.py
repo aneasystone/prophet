@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-class RisingWave(Strategy):
+class RisingWaveOnMa20(Strategy):
 
     # 是否为波谷
     def is_trough(self, d, day):
@@ -103,5 +103,42 @@ class RisingWave(Strategy):
             return True
         return False
 
+    def get_crest_peak_day(self):
+        for d in range(0, 20):
+            # print(d)
+            if self.is_crest_peak(d):
+                return d
+        return -1
+
+    def is_ma_open(self, ma5, ma10, ma20):
+        is_open = ma5 > ma10 and ma10 > ma20
+        if not is_open:
+            return False
+        d_5_10 = abs((ma5-ma10)/ma10)
+        d_10_20 = abs((ma10-ma20)/ma20)
+        return d_5_10 > 0.01 and d_10_20 > 0.005
+
+    def is_step_on_ma20(self):
+        low_today = self.stk.prices['low'].values[-1]
+        low_yesterday = self.stk.prices['low'].values[-2]
+        # print("is_step_on_ma20")
+        # print(low_today <= self.stk.ma20[-1])
+        # print(low_yesterday >= self.stk.ma20[-2])
+        return low_today <= self.stk.ma20[-1] and low_yesterday >= self.stk.ma20[-2]
+
     def is_recommended(self):
-        return self.is_crest_peak(0)
+        
+        d = self.get_crest_peak_day()
+        if d <= 0:
+            return False
+        
+        has_ma_open = False
+        for i in range(d):
+            if self.is_ma_open(self.stk.ma5[-i], self.stk.ma10[-i], self.stk.ma20[-i]):
+                has_ma_open = True
+                break
+        # print(has_ma_open)
+        if not has_ma_open:
+            return False
+
+        return self.is_step_on_ma20()

@@ -102,6 +102,8 @@ class Stock:
             return False
         if self.code.startswith('688'):
             return False
+        if self.code.startswith('689'):
+            return False
         if self.code.startswith('003'):
             return False
         if 'ST' in self.name:

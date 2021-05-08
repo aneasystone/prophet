@@ -22,6 +22,7 @@ from strategy.year_double import YearDouble
 from strategy.week_ma_open import WeekMaOpen
 from strategy.breakthrough import BreakThrough
 from strategy.rising_wave import RisingWave
+from strategy.rising_wave_on_ma20 import RisingWaveOnMa20
 from strategy.step_on_ma20 import StepOnMa20
 
 class StrategyFactory:
@@ -33,26 +34,28 @@ class StrategyFactory:
         
         # define all strategies here
         strategies = {
-            # "HAMMER": Hammer(stk),
-            # "HAMMERPLUS": HammerPlus(stk),
-            # "PIERCE": Pierce(stk),
-            # "SWALLOW": Swallow(stk),
-            # "MACDGOLDCROSS": MacdGoldCross(stk),
-            # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            # "RIVERFLOWER": RiverFlower(stk),
-            # "MACDREVERT": MacdRevert(stk),
-            # "RED": Red(stk),
-            # "AMPLITUDE": Amplitude(stk),
-            # "TURNOVER": Turnover(stk),
-            
-            # "MAOPEN": MaOpen(stk),
-            # "MAOPENRED": MaOpenRed(stk),
-            # "MAOPENLOW": MaOpenLow(stk),
+            "HAMMER": Hammer(stk),
+            "HAMMERPLUS": HammerPlus(stk),
+            "PIERCE": Pierce(stk),
+            "SWALLOW": Swallow(stk),
+            "MACDGOLDCROSS": MacdGoldCross(stk),
+            "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
+            "MACDREVERT": MacdRevert(stk),
+            "RIVERFLOWER": RiverFlower(stk),
+            "RED": Red(stk),
+            "AMPLITUDE": Amplitude(stk),
+            "TURNOVER": Turnover(stk),
+            "MAOPEN": MaOpen(stk),
+            "MAOPENRED": MaOpenRed(stk),
+            "MAOPENLOW": MaOpenLow(stk),
+            "BREAKTHROUGH": BreakThrough(stk),
+
             # "YEARLOWEST": YearLowest(stk),
             # "YEARDOUBLE": YearDouble(stk),
             # "WEEKMAOPEN": WeekMaOpen(stk),
-            # "BREAKTHROUGH": BreakThrough(stk),
-            "RISINGWAVE": RisingWave(stk),
+            
+            # "RISINGWAVE": RisingWave(stk),
+            # "RISINGWAVEONMA20": RisingWaveOnMa20(stk),
             # "STEPONMA20": StepOnMa20(stk),
         }
 
@@ -69,7 +72,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000014.SZ':
+                # if ss['ts_code'] != '605179.SH':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
