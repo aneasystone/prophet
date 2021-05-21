@@ -99,8 +99,7 @@ def get_month_stat(month_from, month_to):
                                 group[strategy][key]["match"] += 1
     write_month_stat(month_from, group)
     
-
-if __name__ == '__main__':
+def show_month_stat():
     month_list = [
         # "202001",
         # "202002",
@@ -121,3 +120,52 @@ if __name__ == '__main__':
     ]
     for i in range(len(month_list) - 1):
         get_month_stat(month_list[i], month_list[i+1])
+
+
+def get_profit(code, date):
+    after_prices = repo.get_all_prices_after(code, date)
+    buy_price = after_prices['open'].values[0]
+    open_price = after_prices['close'].values[1]
+    if open_price >= buy_price * 1.03:
+        return (open_price-buy_price)/buy_price*100
+    high_price = after_prices['high'].values[1]
+    if high_price >= buy_price * 1.03:
+        return 3
+    close_price = after_prices['close'].values[1]
+    return (close_price-buy_price)/buy_price*100
+
+def get_profit_no_limit(code, date):
+    after_prices = repo.get_all_prices_after(code, date)
+    buy_price = after_prices['open'].values[0]
+    for i in range(1, len(after_prices['close'].values)-1):
+        prev_close_price = after_prices['close'].values[i-1]
+        close_price = after_prices['close'].values[i]
+        if (close_price-buy_price)/buy_price < -0.03:
+            print("%.2f %.2f %d" % (buy_price, close_price, i))
+            return (close_price-buy_price)/buy_price
+        if (close_price-prev_close_price)/prev_close_price < -0.03:
+            print("%.2f %.2f %d" % (buy_price, close_price, i))
+            return (close_price-buy_price)/buy_price
+    now_price = after_prices['close'].values[-1]
+    print("%.2f %.2f now" % (buy_price, now_price))
+    return (now_price-buy_price)/buy_price
+
+def run_profit_test():
+    dates = repo.get_all_trade_dates_between('000001.SZ', '20210201', '20210301')
+    sum = 0
+    total = 0
+    for date in dates:
+        print(date)
+        stks = sf.do_strategy(date)
+        for strategy in stks:
+            for stk in stks[strategy]:
+                profit = get_profit_no_limit(stk.code, date)
+                print("%s %s %s %.2f" % (date, stk.code, strategy, profit))
+                sum += profit
+                total += 1
+    if total > 0:
+        print("%.2f / %d = %.2f" % (sum, total, sum/total))
+
+if __name__ == '__main__':
+    # show_month_stat()
+    run_profit_test()

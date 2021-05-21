@@ -34,21 +34,21 @@ class StrategyFactory:
         
         # define all strategies here
         strategies = {
-            "HAMMER": Hammer(stk),
-            "HAMMERPLUS": HammerPlus(stk),
-            "PIERCE": Pierce(stk),
-            "SWALLOW": Swallow(stk),
+            # "HAMMER": Hammer(stk),
+            # "HAMMERPLUS": HammerPlus(stk),
+            # "PIERCE": Pierce(stk),
+            # "SWALLOW": Swallow(stk),
             "MACDGOLDCROSS": MacdGoldCross(stk),
-            "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
-            "MACDREVERT": MacdRevert(stk),
-            "RIVERFLOWER": RiverFlower(stk),
-            "RED": Red(stk),
-            "AMPLITUDE": Amplitude(stk),
-            "TURNOVER": Turnover(stk),
-            "MAOPEN": MaOpen(stk),
-            "MAOPENRED": MaOpenRed(stk),
-            "MAOPENLOW": MaOpenLow(stk),
-            "BREAKTHROUGH": BreakThrough(stk),
+            # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
+            # "MACDREVERT": MacdRevert(stk),
+            # "RIVERFLOWER": RiverFlower(stk),
+            # "RED": Red(stk),
+            # "AMPLITUDE": Amplitude(stk),
+            # "TURNOVER": Turnover(stk),
+            # "MAOPEN": MaOpen(stk),
+            # "MAOPENRED": MaOpenRed(stk),
+            # "MAOPENLOW": MaOpenLow(stk),
+            # "BREAKTHROUGH": BreakThrough(stk),
 
             # "YEARLOWEST": YearLowest(stk),
             # "YEARDOUBLE": YearDouble(stk),
@@ -72,7 +72,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '605179.SH':
+                # if ss['ts_code'] != '002970.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

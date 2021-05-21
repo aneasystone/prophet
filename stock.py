@@ -118,6 +118,10 @@ class Stock:
         self.close = self.prices['close'].values[-1]
         self.average_amplitude = self.get_average_amplitude(7)
 
+        if self.date != self.prices['trade_date'].values[-1]:
+            # 无今天的价格信息，可能被停牌
+            return False
+
         self.macd = self.get_macd()
         self.pre_macd = self.get_pre_macd()
         self.week_macd = self.get_week_macd()
