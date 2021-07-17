@@ -55,7 +55,7 @@ if __name__ == '__main__':
         for s in stocks:
             try:
                 # for debug
-                # if s['ts_code'] != '603110.SH':
+                # if s['ts_code'] != '603393.SH':
                 #     continue
                 print(s['name'] + " " + s['ts_code'])
                 updator.update_all_daily_by_code(s['ts_code'])
@@ -63,4 +63,4 @@ if __name__ == '__main__':
                 traceback.print_exc()
     else:
         # Run this everyday
-        updator.update_all_daily_by_trade_date('20210303')
+        updator.update_all_daily_by_trade_date('20210607')

@@ -26,6 +26,7 @@ class Stock:
     ma5 = None
     ma10 = None
     ma20 = None
+    ma30 = None
     pre_ma5 = None
     pre_ma10 = None
     pre_ma20 = None
@@ -129,6 +130,7 @@ class Stock:
         self.ma5 = self.get_ma(5)
         self.ma10 = self.get_ma(10)
         self.ma20 = self.get_ma(20)
+        self.ma30 = self.get_ma(30)
         self.pre_ma5 = self.get_pre_ma(5)
         self.pre_ma10 = self.get_pre_ma(10)
         self.pre_ma20 = self.get_pre_ma(20)

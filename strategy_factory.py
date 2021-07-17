@@ -15,6 +15,7 @@ from strategy.amplitude import Amplitude
 from strategy.turnover import Turnover
 from strategy.macd_revert import MacdRevert
 from strategy.ma_open import MaOpen
+from strategy.ma_open_four import MaOpenFour
 from strategy.ma_open_red import MaOpenRed
 from strategy.ma_open_low import MaOpenLow
 from strategy.year_lowest import YearLowest
@@ -38,14 +39,16 @@ class StrategyFactory:
             # "HAMMERPLUS": HammerPlus(stk),
             # "PIERCE": Pierce(stk),
             # "SWALLOW": Swallow(stk),
-            "MACDGOLDCROSS": MacdGoldCross(stk),
+            # "MACDGOLDCROSS": MacdGoldCross(stk),
             # "MACDGOLDCROSSMINUS": MacdGoldCrossMinus(stk),
             # "MACDREVERT": MacdRevert(stk),
             # "RIVERFLOWER": RiverFlower(stk),
             # "RED": Red(stk),
             # "AMPLITUDE": Amplitude(stk),
             # "TURNOVER": Turnover(stk),
+            
             # "MAOPEN": MaOpen(stk),
+            "MAOPENFOUR": MaOpenFour(stk),
             # "MAOPENRED": MaOpenRed(stk),
             # "MAOPENLOW": MaOpenLow(stk),
             # "BREAKTHROUGH": BreakThrough(stk),
@@ -72,7 +75,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '002970.SZ':
+                # if ss['ts_code'] != '000799.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
