@@ -35,6 +35,7 @@ class MaOpenFour(Strategy):
     def is_recommended(self):
         ma_open_days = self.get_ma_open_days()
         very_red_days = self.get_very_red_days()
+        ma20_diff = self.get_ma20_diff()
         self.stk.features.append('MA_OPEN_%02d' % (ma_open_days))
         self.stk.features.append('RED_%02d' % (very_red_days))
-        return ma_open_days >= 3 and very_red_days > 2 and self.get_ma20_diff() < 0
+        return ma_open_days >= 3 and very_red_days > 2 and ma20_diff > -3.0
