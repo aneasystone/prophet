@@ -75,7 +75,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000799.SZ':
+                # if ss['ts_code'] != '000100.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

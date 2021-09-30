@@ -3,7 +3,8 @@ from strategy import Strategy
 class MaOpenFour(Strategy):
 
     def is_open(self, i):
-        return self.stk.ma10[i] > self.stk.ma20[i] > self.stk.ma30[i] and self.stk.ma5[i] > self.stk.ma20[i]
+        # print(i, self.stk.ma5[i], self.stk.ma10[i], self.stk.ma20[i], self.stk.ma30[i])
+        return (self.stk.ma10[i] > self.stk.ma20[i] > self.stk.ma30[i] and self.stk.ma5[i] > self.stk.ma20[i]) or (self.stk.ma5[i] > self.stk.ma10[i] > self.stk.ma20[i] and self.stk.ma10[i] > self.stk.ma30[i])
 
     def is_very_red(self, i):
         today_close = self.stk.prices['close'].values[i]
@@ -11,31 +12,37 @@ class MaOpenFour(Strategy):
         rate = (today_close - yesterday_close) / yesterday_close * 100
         return rate >= 7
 
-    def get_ma_open_days(self):
-        i = 1
+    def get_ma_open_days(self, i):
+        day = -i
         while True:
-            if self.is_open(-i):
-                i += 1
+            if self.is_open(-day):
+                day += 1
                 continue
             break
-        return i
+        return day + i
     
-    def get_very_red_days(self):
+    def get_very_red_days(self, i):
         very_red_days = 0
-        for i in range(1, 30):
-            if self.is_very_red(-i):
+        for day in range(-i, -i+30):
+            if self.is_very_red(-day):
                 very_red_days += 1
         return very_red_days
 
-    def get_ma20_diff(self):
-        _close = self.stk.prices['close'].values[-1]
-        _ma20 = self.stk.ma20[-1]
-        return (_ma20 - _close) / _close * 100
+    def is_over_ma10(self, i):
+        _low = self.stk.prices['low'].values[i]
+        _ma10 = self.stk.ma10[i]
+        return _low > _ma10
     
+    def is_recommended_at(self, i):
+        ma_open_days = self.get_ma_open_days(i)
+        very_red_days = self.get_very_red_days(i)
+        # print(i, ma_open_days, very_red_days, self.is_over_ma10(i))
+        return ma_open_days >= 1 and very_red_days >= 1 and self.is_over_ma10(i)
+
     def is_recommended(self):
-        ma_open_days = self.get_ma_open_days()
-        very_red_days = self.get_very_red_days()
-        ma20_diff = self.get_ma20_diff()
-        self.stk.features.append('MA_OPEN_%02d' % (ma_open_days))
-        self.stk.features.append('RED_%02d' % (very_red_days))
-        return ma_open_days >= 3 and very_red_days > 2 and ma20_diff > -3.0
+        if not self.is_recommended_at(-1):
+            return False            
+        for day in range(2, 32):
+            if self.is_recommended_at(-day):
+                return False
+        return True
