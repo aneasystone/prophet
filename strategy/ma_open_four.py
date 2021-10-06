@@ -10,7 +10,7 @@ class MaOpenFour(Strategy):
         today_close = self.stk.prices['close'].values[i]
         yesterday_close = self.stk.prices['close'].values[i-1]
         rate = (today_close - yesterday_close) / yesterday_close * 100
-        return rate >= 7
+        return rate >= 5
 
     def get_ma_open_days(self, i):
         day = -i

@@ -1,6 +1,8 @@
 from stock import Stock
 from repository import Repository
 
+repo = Repository()
+
 class Industry:
 	def __init__(self, name) -> None:
 		self.name = name
@@ -30,9 +32,9 @@ def init_thshy_map():
 	return thshy_map
 
 def get_industry_map(trade_date):
+	print("=== " + trade_date + " ===")
 	thshy_map = init_thshy_map()
 	industry_map = {}
-	repo = Repository()
 	stocks = repo.get_all_stocks()
 	for ss in stocks:
 		try:
@@ -40,9 +42,11 @@ def get_industry_map(trade_date):
 			if stk.init():
 				if stk.code in thshy_map:
 					stk.industry = thshy_map[stk.code]
+				# else:
+				# 	print(stk.code, stk.name, stk.industry)
 				if stk.industry not in industry_map:
 					industry_map[stk.industry] = Industry(stk.industry)
-				print(stk.code, stk.name)
+				# print(stk.code, stk.name)
 				industry_map[stk.industry].stocks.append(stk)
 				if is_open(stk, -1):
 					if is_over_ma10(stk, -1):
@@ -55,7 +59,45 @@ def get_industry_map(trade_date):
 			pass
 	return industry_map
 
-def show_industry_trend_result(industry_map):
+def get_top5_industry_stocks(results, industry_map):
+	stocks = []
+	for i in range(5):
+		industry = results[i]['industry']
+		for stock in industry_map[industry].stocks_good:
+			stocks.append(stock)
+	return stocks
+
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'little')
+
+def write_sel(trade_date, stks):
+    with open('sel/' + trade_date + '.sel', 'wb') as f:
+        f.write(int_to_bytes(len(stks)))
+        f.write(bytes([0]))
+        for stk in stks:
+            xs = stk.code.split('.')
+            if xs[1] == 'SH':
+                f.write(bytes([0x07, 0x11]))
+                f.write(bytes(xs[0], encoding='utf-8'))
+            else:
+                f.write(bytes([0x07, 0x21]))
+                f.write(bytes(xs[0], encoding='utf-8'))
+
+def write_result(trade_date, result):
+	with open('results.txt', 'a') as f:
+		f.write("%s\t%s\t%s\t%s\t%s\t%s\t%.2f\t%.2f\t%.2f\n" % (
+			trade_date,
+			result['industry'], 
+			result['all'],
+			result['good'],
+			result['not_bad'],
+			result['not_good'],
+			result['good_rate'],
+			result['not_bad_rate'],
+			result['not_good_rate']
+		))
+
+def show_industry_trend_result(trade_date, industry_map):
 	results = []
 	for industry in industry_map:
 		all = len(industry_map[industry].stocks)
@@ -73,10 +115,13 @@ def show_industry_trend_result(industry_map):
 			'not_good_rate': not_good/all*100
 		})
 	results = sorted(results, key=lambda x:x['good_rate'], reverse=True)
+	stocks = get_top5_industry_stocks(results, industry_map)
+	write_sel(trade_date, stocks)
 
 	print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}".format(
 		"行业", "总数", "很好", "还行", "挺差", "很好率", "还行率", "挺差率"))
 	for result in results:
+		write_result(trade_date, result)
 		print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}".format(
 			result['industry'], 
 			result['all'],
@@ -87,6 +132,11 @@ def show_industry_trend_result(industry_map):
 			"%.2f" % result['not_bad_rate'],
 			"%.2f" % result['not_good_rate']))
 
-trade_date = '20210927'
+trade_date = '20210930'
 industry_map = get_industry_map(trade_date)
-show_industry_trend_result(industry_map)
+show_industry_trend_result(trade_date, industry_map)
+
+# dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20220101')
+# for date in dates:
+# 	industry_map = get_industry_map(date)
+# 	show_industry_trend_result(date, industry_map)
