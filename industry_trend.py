@@ -1,3 +1,4 @@
+import traceback
 from stock import Stock
 from repository import Repository
 
@@ -7,17 +8,26 @@ class Industry:
 	def __init__(self, name) -> None:
 		self.name = name
 		self.stocks = []
-		self.stocks_good = []
-		self.stocks_not_bad = []
-		self.stocks_not_good = []
+		self.stocks_level = {
+			"0": [],
+			"1": [],
+			"2": [],
+			"3": [],
+			"4": [],
+			"5": [],
+			"6": []
+		}
 
-def is_open(stk, i):
-	return (stk.ma10[i] > stk.ma20[i] > stk.ma30[i] and stk.ma5[i] > stk.ma20[i]) or (stk.ma5[i] > stk.ma10[i] > stk.ma20[i] and stk.ma10[i] > stk.ma30[i])
-
-def is_over_ma10(stk, i):
-	_low = stk.prices['low'].values[i]
-	_ma10 = stk.ma10[i]
-	return _low > _ma10
+def get_stock_level(stk, i):
+	arr = [stk.ma30[i], stk.ma20[i], stk.ma10[i], stk.ma5[i]]
+	steps = 0
+	n = len(arr)
+	for i in range(n-1):
+		for j in range(0, n-i-1):
+			if arr[j] > arr[j + 1] :
+				arr[j], arr[j + 1] = arr[j + 1], arr[j]
+				steps += 1
+	return steps
 
 def init_thshy_map():
 	thshy_map = {}
@@ -42,36 +52,39 @@ def get_industry_map(trade_date):
 			if stk.init():
 				if stk.code in thshy_map:
 					stk.industry = thshy_map[stk.code]
-				# else:
-				# 	print(stk.code, stk.name, stk.industry)
+				else:
+					# print(stk.code, stk.name, stk.industry)
+					continue
 				if stk.industry not in industry_map:
 					industry_map[stk.industry] = Industry(stk.industry)
-				# print(stk.code, stk.name)
 				industry_map[stk.industry].stocks.append(stk)
-				if is_open(stk, -1):
-					if is_over_ma10(stk, -1):
-						industry_map[stk.industry].stocks_good.append(stk)
-					else:
-						industry_map[stk.industry].stocks_not_bad.append(stk)
-				else:
-					industry_map[stk.industry].stocks_not_good.append(stk)
+				level = get_stock_level(stk, -1)
+				# print(stk.code, stk.name, stk.industry, level)
+				industry_map[stk.industry].stocks_level[str(level)].append(stk)
 		except:
+			# traceback.print_exc()
 			pass
 	return industry_map
 
-def get_top5_industry_stocks(results, industry_map):
-	stocks = []
-	for i in range(5):
-		industry = results[i]['industry']
-		for stock in industry_map[industry].stocks_good:
+def write_good_industry_stocks(trade_date, results, industry_map):
+	for result in results:
+		if result['score'] < 60:
+			continue
+		stocks = []
+		industry = result['industry']
+		for stock in industry_map[industry].stocks_level["0"]:
 			stocks.append(stock)
-	return stocks
+		for stock in industry_map[industry].stocks_level["1"]:
+			stocks.append(stock)
+		for stock in industry_map[industry].stocks_level["2"]:
+			stocks.append(stock)
+		write_sel(trade_date, industry, stocks)
 
 def int_to_bytes(x: int) -> bytes:
     return x.to_bytes((x.bit_length() + 7) // 8, 'little')
 
-def write_sel(trade_date, stks):
-    with open('sel/' + trade_date + '.sel', 'wb') as f:
+def write_sel(trade_date, industry, stks):
+    with open('sel/' + trade_date + '_' + industry + '.sel', 'wb') as f:
         f.write(int_to_bytes(len(stks)))
         f.write(bytes([0]))
         for stk in stks:
@@ -85,58 +98,67 @@ def write_sel(trade_date, stks):
 
 def write_result(trade_date, result):
 	with open('results.txt', 'a') as f:
-		f.write("%s\t%s\t%s\t%s\t%s\t%s\t%.2f\t%.2f\t%.2f\n" % (
+		f.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2f\n" % (
 			trade_date,
 			result['industry'], 
 			result['all'],
-			result['good'],
-			result['not_bad'],
-			result['not_good'],
-			result['good_rate'],
-			result['not_bad_rate'],
-			result['not_good_rate']
+			result['level_0'],
+			result['level_1'],
+			result['level_2'],
+			result['level_3'],
+			result['level_4'],
+			result['level_5'],
+			result['level_6'],
+			result['score']
 		))
 
 def show_industry_trend_result(trade_date, industry_map):
 	results = []
 	for industry in industry_map:
 		all = len(industry_map[industry].stocks)
-		good = len(industry_map[industry].stocks_good)
-		not_bad = len(industry_map[industry].stocks_not_bad)
-		not_good = len(industry_map[industry].stocks_not_good)
+		level_0 = len(industry_map[industry].stocks_level["0"])
+		level_1 = len(industry_map[industry].stocks_level["1"])
+		level_2 = len(industry_map[industry].stocks_level["2"])
+		level_3 = len(industry_map[industry].stocks_level["3"])
+		level_4 = len(industry_map[industry].stocks_level["4"])
+		level_5 = len(industry_map[industry].stocks_level["5"])
+		level_6 = len(industry_map[industry].stocks_level["6"])
 		results.append({
 			'industry': industry,
 			'all': all,
-			'good': good,
-			'not_bad': not_bad,
-			'not_good': not_good,
-			'good_rate': good/all*100,
-			'not_bad_rate': not_bad/all*100,
-			'not_good_rate': not_good/all*100
+			'level_0': level_0,
+			'level_1': level_1,
+			'level_2': level_2,
+			'level_3': level_3,
+			'level_4': level_4,
+			'level_5': level_5,
+			'level_6': level_6,
+			'score': (level_0*6+level_1*5+level_2*4+level_3*3+level_4*2+level_5*1+level_6*0)*100/6/all
 		})
-	results = sorted(results, key=lambda x:x['good_rate'], reverse=True)
-	stocks = get_top5_industry_stocks(results, industry_map)
-	write_sel(trade_date, stocks)
+	results = sorted(results, key=lambda x:x['score'], reverse=True)
+	write_good_industry_stocks(trade_date, results, industry_map)
 
-	print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}".format(
-		"行业", "总数", "很好", "还行", "挺差", "很好率", "还行率", "挺差率"))
+	print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}\t{8:<10}\t{9:<10}".format(
+		"行业", "总数", "零级", "一级", "二级", "三级", "四级", "五级", "六级", "行业评分"))
 	for result in results:
 		write_result(trade_date, result)
-		print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}".format(
+		print("{0:<15}\t{1:<10}\t{2:<10}\t{3:<10}\t{4:<10}\t{5:<10}\t{6:<10}\t{7:<10}\t{8:<10}\t{9:<10}".format(
 			result['industry'], 
 			result['all'],
-			result['good'],
-			result['not_bad'],
-			result['not_good'],
-			"%.2f" % result['good_rate'],
-			"%.2f" % result['not_bad_rate'],
-			"%.2f" % result['not_good_rate']))
+			result['level_0'],
+			result['level_1'],
+			result['level_2'],
+			result['level_3'],
+			result['level_4'],
+			result['level_5'],
+			result['level_6'],
+			"%.2f" % result['score']))
 
-trade_date = '20210930'
-industry_map = get_industry_map(trade_date)
-show_industry_trend_result(trade_date, industry_map)
+# trade_date = '20211015'
+# industry_map = get_industry_map(trade_date)
+# show_industry_trend_result(trade_date, industry_map)
 
-# dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20220101')
-# for date in dates:
-# 	industry_map = get_industry_map(date)
-# 	show_industry_trend_result(date, industry_map)
+dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210101')
+for date in dates:
+	industry_map = get_industry_map(date)
+	show_industry_trend_result(date, industry_map)

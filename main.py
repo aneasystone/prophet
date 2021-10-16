@@ -100,7 +100,7 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20210930'
+    trade_date = '20211015'
     show_recommended(trade_date)
     
     # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20211001')
