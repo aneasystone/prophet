@@ -6,6 +6,17 @@ from strategy_factory import StrategyFactory
 
 repo = Repository()
 
+def get_profit_rate_of_day(trade_date, stk, days):
+    after_prices = repo.get_all_prices_after(stk.code, trade_date)
+    if (len(after_prices['open'].values) < days+1):
+        return "--"
+    buy_price = after_prices['open'].values[0]
+    high_price = after_prices['high'].values[1]
+    for i in range(2,days+1):
+        if after_prices['high'].values[i] > high_price:
+            high_price = after_prices['high'].values[i]
+    return "%.2f" % ((high_price-buy_price)/buy_price*100)
+
 def print_green(s):
     print(f"\033[0;32;40m%s\033[0m" % (s))
 
@@ -17,18 +28,6 @@ def get_ma20_diff(stk):
     _ma20 = stk.ma20[-1]
     # print(_close, _ma20)
     return (_ma20 - _close) / _close * 100
-
-def get_red_days(stk):
-    red_days = 0
-    days = 60
-    if len(stk.prices['close'].values) < days:
-        days = len(stk.prices['close'].values)
-    for i in range(1,days):
-        _close = stk.prices['close'].values[-i]
-        _pre_close = stk.prices['pre_close'].values[-i]
-        if (_close - _pre_close) / _pre_close > 0.07:
-            red_days += 1
-    return red_days
 
 def show_stock_stat_result(stks):
     print("===============================")
@@ -45,21 +44,20 @@ def show_stock_stat_result(stks):
             print("{0:{3}<10}\t{1:<10}\t{2:<10}".format(industry, map[industry]["match"], map[industry]["total"], chr(12288)))
 
 def show_stock_result(trade_date, stk):
-    ma20_diff = get_ma20_diff(stk)
-    red_days = get_red_days(stk)
-    info = "{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4}\t{6}\t{7}".format(
+    day_1_profit = get_profit_rate_of_day(trade_date, stk, 1)
+    day_2_profit = get_profit_rate_of_day(trade_date, stk, 2)
+    day_3_profit = get_profit_rate_of_day(trade_date, stk, 3)
+    day_4_profit = get_profit_rate_of_day(trade_date, stk, 4)
+    day_5_profit = get_profit_rate_of_day(trade_date, stk, 5)
+    info = "{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4}\t{6}\t{7}\t{8}\t{9}\t{10}".format(
             stk.name,
             stk.code,
             str(stk.close),
             stk.industry,
             ", ".join(stk.features),
             chr(12288),
-            "%.2f%%" % (ma20_diff),
-            red_days)
-    if ma20_diff > -3.0:
-        print_green(info)
-    else:
-        print(info)
+            day_1_profit, day_2_profit, day_3_profit, day_4_profit, day_5_profit)
+    print(info)
 
 def sort_by_ma20_diff(stks):
     return sorted(stks, key=get_ma20_diff, reverse=True)
@@ -100,9 +98,9 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20211015'
+    trade_date = '20211217'
     show_recommended(trade_date)
     
-    # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20211001')
+    # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20220101')
     # for date in dates:
     #     show_recommended(date)

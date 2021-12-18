@@ -26,6 +26,13 @@ from strategy.rising_wave import RisingWave
 from strategy.rising_wave_on_ma20 import RisingWaveOnMa20
 from strategy.step_on_ma20 import StepOnMa20
 
+from strategy.big_red import BigRed
+from strategy.up_window import UpWindow
+from strategy.big_red_1 import BigRed1
+from strategy.big_red_2 import BigRed2
+from strategy.big_red_3 import BigRed3
+from strategy.big_red_4 import BigRed4
+
 class StrategyFactory:
 
     def __init__(self, repo):
@@ -48,7 +55,7 @@ class StrategyFactory:
             # "TURNOVER": Turnover(stk),
             
             # "MAOPEN": MaOpen(stk),
-            "MAOPENFOUR": MaOpenFour(stk),
+            # "MAOPENFOUR": MaOpenFour(stk),
             # "MAOPENRED": MaOpenRed(stk),
             # "MAOPENLOW": MaOpenLow(stk),
             # "BREAKTHROUGH": BreakThrough(stk),
@@ -60,6 +67,13 @@ class StrategyFactory:
             # "RISINGWAVE": RisingWave(stk),
             # "RISINGWAVEONMA20": RisingWaveOnMa20(stk),
             # "STEPONMA20": StepOnMa20(stk),
+
+            "BIGRED": BigRed(stk),
+            # "跳空": UpWindow(stk),
+            # "一板": BigRed1(stk),
+            # "二板": BigRed2(stk),
+            # "三板": BigRed3(stk),
+            # "四板": BigRed4(stk),
         }
 
         # which strategy is recommended
@@ -75,7 +89,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000100.SZ':
+                # if ss['ts_code'] != '000998.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

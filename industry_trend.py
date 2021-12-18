@@ -1,5 +1,6 @@
 import traceback
 from stock import Stock
+from updator import Updator
 from repository import Repository
 
 repo = Repository()
@@ -154,11 +155,13 @@ def show_industry_trend_result(trade_date, industry_map):
 			result['level_6'],
 			"%.2f" % result['score']))
 
-# trade_date = '20211015'
-# industry_map = get_industry_map(trade_date)
-# show_industry_trend_result(trade_date, industry_map)
+trade_date = '20211206'
+updator = Updator()
+updator.update_all_daily_by_trade_date(trade_date)
+industry_map = get_industry_map(trade_date)
+show_industry_trend_result(trade_date, industry_map)
 
-dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210101')
-for date in dates:
-	industry_map = get_industry_map(date)
-	show_industry_trend_result(date, industry_map)
+# dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20210101')
+# for date in dates:
+# 	industry_map = get_industry_map(date)
+# 	show_industry_trend_result(date, industry_map)
