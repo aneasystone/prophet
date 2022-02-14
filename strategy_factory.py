@@ -27,11 +27,14 @@ from strategy.rising_wave_on_ma20 import RisingWaveOnMa20
 from strategy.step_on_ma20 import StepOnMa20
 
 from strategy.big_red import BigRed
+from strategy.one_line_red import OneLineRed
 from strategy.up_window import UpWindow
 from strategy.big_red_1 import BigRed1
 from strategy.big_red_2 import BigRed2
 from strategy.big_red_3 import BigRed3
 from strategy.big_red_4 import BigRed4
+from strategy.big_break import BigBreak
+from strategy.big_red_continuous import BigRedContinuous
 
 class StrategyFactory:
 
@@ -68,7 +71,10 @@ class StrategyFactory:
             # "RISINGWAVEONMA20": RisingWaveOnMa20(stk),
             # "STEPONMA20": StepOnMa20(stk),
 
-            "BIGRED": BigRed(stk),
+            "涨停": BigRed(stk),
+            "炸板": BigBreak(stk),
+            "连板": BigRedContinuous(stk),
+            
             # "跳空": UpWindow(stk),
             # "一板": BigRed1(stk),
             # "二板": BigRed2(stk),
@@ -89,7 +95,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000998.SZ':
+                # if ss['ts_code'] != '000819.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

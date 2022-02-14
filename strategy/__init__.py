@@ -26,6 +26,18 @@ class Strategy:
                 count += 1
         return count >= 8
     
+    # get the level, level = 0 means open
+    def get_stock_level(self, i):
+        arr = [self.stk.ma30[i], self.stk.ma20[i], self.stk.ma10[i], self.stk.ma5[i]]
+        steps = 0
+        n = len(arr)
+        for i in range(n-1):
+            for j in range(0, n-i-1):
+                if arr[j] > arr[j + 1] :
+                    arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                    steps += 1
+        return steps
+
     # check if average amplitude of latest n days is over m%
     def is_amplitude_over(self, days, percent):
         cnt = 0

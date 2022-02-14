@@ -66,7 +66,9 @@ def int_to_bytes(x: int) -> bytes:
     return x.to_bytes((x.bit_length() + 7) // 8, 'little')
 
 def write_sel(strategy, trade_date, stks):
-    with open('sel/' + strategy + '_' + trade_date + '.sel', 'wb') as f:
+    if len(stks) == 0:
+        return
+    with open('sel/' + trade_date + '_' + strategy + '.sel', 'wb') as f:
         f.write(int_to_bytes(len(stks)))
         f.write(bytes([0]))
         for stk in stks:
@@ -98,9 +100,9 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20211217'
+    trade_date = '20220210'
     show_recommended(trade_date)
     
-    # dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20220101')
+    # dates = repo.get_all_trade_dates_between('000001.SZ', '20220101', '20230101')
     # for date in dates:
     #     show_recommended(date)
