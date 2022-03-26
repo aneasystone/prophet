@@ -68,3 +68,9 @@ class Repository:
         sql = "SELECT trade_date FROM daily WHERE ts_code = '" + code + "' AND trade_date >= '" + begin + "' AND trade_date < '" + end + "' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
         return df['trade_date'].values
+
+    def is_daily_exists(self, trade_date):
+        '''判断某天的数据是否已存在'''
+        sql = "SELECT * FROM daily WHERE trade_date = '" + trade_date + "' LIMIT 1"
+        df = pd.read_sql(sql=sql, con=engine)
+        return not df.empty

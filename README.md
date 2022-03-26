@@ -75,6 +75,56 @@ CREATE TABLE `stock_basic` (
   KEY `ts_code` (`ts_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `daily_basic`;
+
+CREATE TABLE `daily_basic` (
+  `ts_code` varchar(32) DEFAULT NULL,
+  `trade_date` varchar(32) DEFAULT NULL,
+  `close` double DEFAULT NULL,
+  `turnover_rate` double DEFAULT NULL,
+  `turnover_rate_f` double DEFAULT NULL,
+  `volume_ratio` double DEFAULT NULL,
+  `pe` double DEFAULT NULL,
+  `pe_ttm` double DEFAULT NULL,
+  `pb` double DEFAULT NULL,
+  `ps` double DEFAULT NULL,
+  `ps_ttm` double DEFAULT NULL,
+  `dv_ratio` double DEFAULT NULL,
+  `dv_ttm` double DEFAULT NULL,
+  `total_share` double DEFAULT NULL,
+  `float_share` double DEFAULT NULL,
+  `free_share` double DEFAULT NULL,
+  `total_mv` double DEFAULT NULL,
+  `circ_mv` double DEFAULT NULL,
+  KEY `ts_code_trade_date` (`ts_code`,`trade_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `money_flow`;
+
+CREATE TABLE `money_flow` (
+  `ts_code` varchar(32) DEFAULT NULL,
+  `trade_date` varchar(32) DEFAULT NULL,
+  `buy_sm_vol` bigint(20) DEFAULT NULL,
+  `buy_sm_amount` double DEFAULT NULL,
+  `sell_sm_vol` bigint(20) DEFAULT NULL,
+  `sell_sm_amount` double DEFAULT NULL,
+  `buy_md_vol` bigint(20) DEFAULT NULL,
+  `buy_md_amount` double DEFAULT NULL,
+  `sell_md_vol` bigint(20) DEFAULT NULL,
+  `sell_md_amount` double DEFAULT NULL,
+  `buy_lg_vol` bigint(20) DEFAULT NULL,
+  `buy_lg_amount` double DEFAULT NULL,
+  `sell_lg_vol` bigint(20) DEFAULT NULL,
+  `sell_lg_amount` double DEFAULT NULL,
+  `buy_elg_vol` bigint(20) DEFAULT NULL,
+  `buy_elg_amount` double DEFAULT NULL,
+  `sell_elg_vol` bigint(20) DEFAULT NULL,
+  `sell_elg_amount` double DEFAULT NULL,
+  `net_mf_vol` bigint(20) DEFAULT NULL,
+  `net_mf_amount` double DEFAULT NULL,
+  KEY `ts_code_trade_date` (`ts_code`,`trade_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -86,8 +136,6 @@ CREATE TABLE `stock_basic` (
 ```
 $ python updator.py
 ```
-
-首次运行将 `first_run` 设置为 `True`，会初始化所有的数据，速度会比较慢。后续可以根据日期增量更新。
 
 ## 运行
 
