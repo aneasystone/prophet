@@ -6,17 +6,6 @@ from strategy_factory import StrategyFactory
 
 repo = Repository()
 
-def get_profit_rate_of_day(trade_date, stk, days):
-    after_prices = repo.get_all_prices_after(stk.code, trade_date)
-    if (len(after_prices['open'].values) < days+1):
-        return "--"
-    buy_price = after_prices['open'].values[0]
-    high_price = after_prices['high'].values[1]
-    for i in range(2,days+1):
-        if after_prices['high'].values[i] > high_price:
-            high_price = after_prices['high'].values[i]
-    return "%.2f" % ((high_price-buy_price)/buy_price*100)
-
 def print_green(s):
     print(f"\033[0;32;40m%s\033[0m" % (s))
 
@@ -44,19 +33,14 @@ def show_stock_stat_result(stks):
             print("{0:{3}<10}\t{1:<10}\t{2:<10}".format(industry, map[industry]["match"], map[industry]["total"], chr(12288)))
 
 def show_stock_result(trade_date, stk):
-    day_1_profit = get_profit_rate_of_day(trade_date, stk, 1)
-    day_2_profit = get_profit_rate_of_day(trade_date, stk, 2)
-    day_3_profit = get_profit_rate_of_day(trade_date, stk, 3)
-    day_4_profit = get_profit_rate_of_day(trade_date, stk, 4)
-    day_5_profit = get_profit_rate_of_day(trade_date, stk, 5)
-    info = "{0:{5}<10}\t{1:<10}\t{2:<10}\t{3:{5}<10}\t{4}\t{6}\t{7}\t{8}\t{9}\t{10}".format(
+    info = "{0:<10}\t{1:{6}<10}\t{2:<10}\t{3:<10}\t{4:{6}<10}\t{5}".format(
+            trade_date,
             stk.name,
             stk.code,
             str(stk.close),
             stk.industry,
             ", ".join(stk.features),
-            chr(12288),
-            day_1_profit, day_2_profit, day_3_profit, day_4_profit, day_5_profit)
+            chr(12288))
     print(info)
 
 def sort_by_ma20_diff(stks):
@@ -100,9 +84,9 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20220210'
+    trade_date = '20220224'
     show_recommended(trade_date)
     
-    # dates = repo.get_all_trade_dates_between('000001.SZ', '20220101', '20230101')
+    # dates = repo.get_all_trade_dates_between('000001.SZ', '20200101', '20230101')
     # for date in dates:
     #     show_recommended(date)

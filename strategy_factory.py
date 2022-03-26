@@ -35,6 +35,8 @@ from strategy.big_red_3 import BigRed3
 from strategy.big_red_4 import BigRed4
 from strategy.big_break import BigBreak
 from strategy.big_red_continuous import BigRedContinuous
+from strategy.big_red_3_buy_low import BigRed3BuyLow
+from strategy.big_red_3_open_low import BigRed3OpenLow
 
 class StrategyFactory:
 
@@ -73,13 +75,15 @@ class StrategyFactory:
 
             "涨停": BigRed(stk),
             "炸板": BigBreak(stk),
-            "连板": BigRedContinuous(stk),
+            # "连板": BigRedContinuous(stk),
             
             # "跳空": UpWindow(stk),
             # "一板": BigRed1(stk),
             # "二板": BigRed2(stk),
-            # "三板": BigRed3(stk),
+            "三板": BigRed3(stk),
             # "四板": BigRed4(stk),
+            # "三板低开": BigRed3OpenLow(stk),
+            "三板低吸": BigRed3BuyLow(stk),
         }
 
         # which strategy is recommended
@@ -95,7 +99,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '000819.SZ':
+                # if ss['ts_code'] != '600706.SH':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)
