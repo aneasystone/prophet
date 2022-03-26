@@ -9,6 +9,7 @@ engine = create_engine('mysql+pymysql://root:123456@localhost:3306/stock')
 class Repository:
 
     prices_cache = {}
+    money_flow_cache = {}
     stock_cache = {}
     all_stocks_cache = None
 
@@ -50,6 +51,25 @@ class Repository:
     def get_all_prices_after(self, code, date):
         prices = self.get_all_prices(code)
         return prices[prices['trade_date'] > date]
+
+    # get all money flow of this stock
+    def get_all_money_flow(self, code):
+        if code in self.money_flow_cache:
+            return self.money_flow_cache[code]
+        sql = "SELECT * FROM money_flow WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
+        df = pd.read_sql(sql=sql, con=engine)
+        self.money_flow_cache[code] = df
+        return df
+
+    # get all money flow of this stock before someday
+    def get_all_money_flow_before(self, code, date):
+        money_flow = self.get_all_money_flow(code)
+        return money_flow[money_flow['trade_date'] <= date]
+
+    # get all money flow of this stock after someday
+    def get_all_money_flow_after(self, code, date):
+        money_flow = self.get_all_money_flow(code)
+        return money_flow[money_flow['trade_date'] > date]
 
     # get all trade dates of this stock
     def get_all_trade_dates(self, code):

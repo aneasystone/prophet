@@ -19,6 +19,7 @@ class Stock:
     prices = None
     close = 0
     average_amplitude = None
+    money_flow = None
 
     macd = None
     pre_macd = None
@@ -40,6 +41,10 @@ class Stock:
     # get all prices of this stock
     def get_all_prices(self):
         return self.repo.get_all_prices_before(self.code, self.date)
+
+    # get all money flow of this stock
+    def get_all_money_flow(self):
+        return self.repo.get_all_money_flow_before(self.code, self.date)
 
     # get macd metric of this stock
     def get_macd(self):
@@ -118,6 +123,7 @@ class Stock:
         self.prices = self.get_all_prices()
         self.close = self.prices['close'].values[-1]
         self.average_amplitude = self.get_average_amplitude(7)
+        self.money_flow = self.get_all_money_flow()
 
         if self.date != self.prices['trade_date'].values[-1]:
             # 无今天的价格信息，可能被停牌

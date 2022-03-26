@@ -2,6 +2,7 @@ from stock import Stock
 from repository import Repository
 
 import traceback
+from strategy.dragon import Dragon
 
 from strategy.hammer import Hammer
 from strategy.hammer_plus import HammerPlus
@@ -73,17 +74,18 @@ class StrategyFactory:
             # "RISINGWAVEONMA20": RisingWaveOnMa20(stk),
             # "STEPONMA20": StepOnMa20(stk),
 
-            "涨停": BigRed(stk),
-            "炸板": BigBreak(stk),
+            # "涨停": BigRed(stk),
+            # "炸板": BigBreak(stk),
             # "连板": BigRedContinuous(stk),
             
             # "跳空": UpWindow(stk),
             # "一板": BigRed1(stk),
             # "二板": BigRed2(stk),
-            "三板": BigRed3(stk),
+            # "三板": BigRed3(stk),
             # "四板": BigRed4(stk),
             # "三板低开": BigRed3OpenLow(stk),
-            "三板低吸": BigRed3BuyLow(stk),
+            # "三板低吸": BigRed3BuyLow(stk),
+            "DRAGON": Dragon(stk),
         }
 
         # which strategy is recommended
@@ -99,7 +101,7 @@ class StrategyFactory:
         for ss in stocks:
             try:
                 # for debug
-                # if ss['ts_code'] != '600706.SH':
+                # if ss['ts_code'] != '002370.SZ':
                 #     continue
                 
                 stk = Stock(ss['name'], ss['ts_code'], trade_date)

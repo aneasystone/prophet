@@ -44,7 +44,7 @@ if __name__ == '__main__':
     print("Total %s stocks updated." % len(df))
 
     # 获取交易日历
-    df = TuShareUtil.get_all_trade_dates_after('20220101')
+    df = TuShareUtil.get_all_trade_dates_after('20200101')
     for index, row in df.iterrows():
         if row['is_open']:
             print("%s OPEN" % row['cal_date'])
