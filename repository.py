@@ -36,8 +36,8 @@ class Repository:
     def get_all_prices(self, code):
         if code in self.prices_cache:
             return self.prices_cache[code]
-        # sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
-        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
+        sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' ORDER BY trade_date"
+        # sql = "SELECT * FROM daily WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
         self.prices_cache[code] = df
         return df
@@ -56,7 +56,8 @@ class Repository:
     def get_all_money_flow(self, code):
         if code in self.money_flow_cache:
             return self.money_flow_cache[code]
-        sql = "SELECT * FROM money_flow WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
+        sql = "SELECT * FROM money_flow WHERE ts_code = '" + code + "' ORDER BY trade_date"
+        # sql = "SELECT * FROM money_flow WHERE ts_code = '" + code + "' AND trade_date > '2019-01-01' ORDER BY trade_date"
         df = pd.read_sql(sql=sql, con=engine)
         self.money_flow_cache[code] = df
         return df

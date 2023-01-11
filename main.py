@@ -5,16 +5,43 @@ from strategy_factory import StrategyFactory
 
 repo = Repository()
 
-def show_buy_result(trade_date, stk):
-    after_prices = repo.get_all_prices_after(stk.code, trade_date)
-    if (len(after_prices['open'].values) == 0):
-        return "--"
-    low = after_prices['low'].values[0]
-    close = after_prices['close'].values[0]
-    buy = stk.close * 0.95
+def get_highest_price(after_prices):
+    high = after_prices['high'].values[1]
+    for i in range(2, 10):
+        if (len(after_prices['high'].values) < i+1):
+            break
+        if after_prices['high'].values[i] > high:
+            high = after_prices['high'].values[i]
+    return high
+
+def get_profit_rate(close, low, high, buy_rate):
+    buy = close * buy_rate
     if low > buy:
         return "MISS"
-    return "%.2f" % ((close-buy)/buy*100)
+    return "%.2f" % ((high-buy)/buy*100)
+
+def show_buy_result(trade_date, stk):
+    after_prices = repo.get_all_prices_after(stk.code, trade_date)
+    if (len(after_prices['open'].values) < 2):
+        return "--"
+
+    # 10日内的最高价
+    high = get_highest_price(after_prices)
+    # 第2天最低价
+    low = after_prices['low'].values[0]
+
+    return "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (
+        get_profit_rate(stk.close, low, high, 1.00),
+        get_profit_rate(stk.close, low, high, 0.99),
+        get_profit_rate(stk.close, low, high, 0.98),
+        get_profit_rate(stk.close, low, high, 0.97),
+        get_profit_rate(stk.close, low, high, 0.96),
+        get_profit_rate(stk.close, low, high, 0.95),
+        get_profit_rate(stk.close, low, high, 0.94),
+        get_profit_rate(stk.close, low, high, 0.93),
+        get_profit_rate(stk.close, low, high, 0.92),
+        get_profit_rate(stk.close, low, high, 0.91)
+    )
 
 def show_stock_result(trade_date, stk):
     info = "{0:<10}\t{1:{6}<10}\t{2:<10}\t{3:<10}\t{4:{6}<10}\t{5}\t{7}".format(
@@ -60,9 +87,9 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    # trade_date = '20220321'
-    # show_recommended(trade_date)
+    trade_date = '20230109'
+    show_recommended(trade_date)
     
-    dates = repo.get_all_trade_dates_between('000001.SZ', '20210101', '20230101')
-    for date in dates:
-        show_recommended(date)
+    # dates = repo.get_all_trade_dates_between('000001.SZ', '20220401', '20230101')
+    # for date in dates:
+    #     show_recommended(date)

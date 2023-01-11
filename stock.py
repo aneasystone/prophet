@@ -104,11 +104,9 @@ class Stock:
     def init(self):
 
         # ignore these stocks
-        if self.code.startswith('300'):
+        if self.code.startswith('30'):
             return False
-        if self.code.startswith('688'):
-            return False
-        if self.code.startswith('689'):
+        if self.code.startswith('68'):
             return False
         if self.code.startswith('003'):
             return False

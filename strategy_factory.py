@@ -2,8 +2,9 @@ from stock import Stock
 from repository import Repository
 
 import traceback
+from strategy.big_money import BigMoney
 from strategy.dragon import Dragon
-
+from strategy.dragon_green import DragonGreen
 from strategy.hammer import Hammer
 from strategy.hammer_plus import HammerPlus
 from strategy.pierce import Pierce
@@ -85,7 +86,9 @@ class StrategyFactory:
             # "四板": BigRed4(stk),
             # "三板低开": BigRed3OpenLow(stk),
             # "三板低吸": BigRed3BuyLow(stk),
-            "DRAGON": Dragon(stk),
+            # "DRAGON": Dragon(stk),
+            # "DRAGONGREEN": DragonGreen(stk),
+            "BIGMONEY": BigMoney(stk),
         }
 
         # which strategy is recommended

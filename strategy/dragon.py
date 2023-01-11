@@ -2,6 +2,11 @@ from strategy import Strategy
 
 class Dragon(Strategy):
     
+    def is_red(self, i):
+        today_close = self.stk.prices['close'].values[i]
+        today_open = self.stk.prices['open'].values[i]
+        return today_close >= today_open
+
     def is_rise_stop(self, i):
         today_close = self.stk.prices['close'].values[i]
         today_high = self.stk.prices['high'].values[i]
@@ -11,7 +16,7 @@ class Dragon(Strategy):
 
     def is_rise_stop_twice(self):
         b1 = self.is_rise_stop(-1) and self.is_rise_stop(-2)
-        b2 = self.is_rise_stop(-1) and self.is_rise_stop(-3)
+        b2 = self.is_rise_stop(-1) and self.is_red(-2) and self.is_rise_stop(-3)
         # print(b1, b2)
         return b1 or b2
 
