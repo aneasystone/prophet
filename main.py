@@ -1,9 +1,12 @@
-import traceback
+from datetime import timedelta, date
 from stock import Stock
 from repository import Repository
+from updator import Updator
+from tushare_util import TuShareUtil
 from strategy_factory import StrategyFactory
 
 repo = Repository()
+updator = Updator()
 
 def get_highest_price(after_prices):
     high = after_prices['high'].values[1]
@@ -87,9 +90,25 @@ def show_recommended(trade_date):
 
 if __name__ == '__main__':
 
-    trade_date = '20230112'
-    show_recommended(trade_date)
-    
-    # dates = repo.get_all_trade_dates_between('000001.SZ', '20220401', '20230101')
-    # for date in dates:
-    #     show_recommended(date)
+    # 更新最新的股票列表
+    df = updator.update_stock_basic()
+    print("Total %s stocks updated." % len(df))
+
+    today = date.today()
+    weekago = today + timedelta(days=-7)
+
+    # 获取交易日历
+    df = TuShareUtil.get_all_trade_dates_after(weekago.strftime("%Y%m%d"))
+    for index, row in df.iterrows():
+        if row['is_open']:
+            print("%s OPEN" % row['cal_date'])
+            if repo.is_daily_exists(row['cal_date']):
+                print("  %s EXISTS" % row['cal_date'])
+            else:
+                updator.update_daily(row['cal_date'])
+                updator.update_daily_basic(row['cal_date'])
+                updator.update_money_flow(row['cal_date'])
+                print("  %s UPDATED" % row['cal_date'])
+                show_recommended(row['cal_date'])
+        else:
+            print("%s CLOSE" % row['cal_date'])

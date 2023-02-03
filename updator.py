@@ -33,27 +33,3 @@ class Updator:
         df = TuShareUtil.get_money_flow(trade_date)
         df.to_sql('money_flow', engine, index=False, if_exists='append', chunksize=5000)
         return df
-
-if __name__ == '__main__':
-    
-    repo = Repository()
-    updator = Updator()
-    
-    # 更新最新的股票列表
-    df = updator.update_stock_basic()
-    print("Total %s stocks updated." % len(df))
-
-    # 获取交易日历
-    df = TuShareUtil.get_all_trade_dates_after('20230111')
-    for index, row in df.iterrows():
-        if row['is_open']:
-            print("%s OPEN" % row['cal_date'])
-            if repo.is_daily_exists(row['cal_date']):
-                print("  %s EXISTS" % row['cal_date'])
-            else:
-                updator.update_daily(row['cal_date'])
-                updator.update_daily_basic(row['cal_date'])
-                updator.update_money_flow(row['cal_date'])
-                print("  %s UPDATED" % row['cal_date'])
-        else:
-            print("%s CLOSE" % row['cal_date'])
